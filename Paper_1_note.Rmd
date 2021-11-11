@@ -1,0 +1,417 @@
+---
+title: "Paper 1"
+author: "Kezia Olive"
+output: rmdformats::material
+---
+
+# Introduction
+
+My project is titled **Gendered Pathways to STEM aspiration**, with a dataset of primary school students' interest (Subjective Task Value or STV) towards *math*, *science* and *Finnish* throughout the six years of primary school.\
+
+### Variables
+The variables to be used in this study are:
+
+- Gender
+- STV in math, science & Finnish, throughout 6 years
+- Students' STEM aspiration at year 6
+
+(co-variates):
+
+- Grades at year 6
+- Students' self-concept of ability 
+- Parental SES
+
+### Research Questions
+In this project, we are trying to answer several research questions:
+
+- What does the change in subject-specific Task Value (in math, science and Finnish) look like over time? (checking linear/quadratic change)
+- Are there gendered differences in the development of subject-specific Task Value? (checking Intercept/slope difference between boys and girls)
+- Does the Subjective Task Value development predict STEM aspiration at the end of primary school? (checking relationship between the possible gendered intercept-slope difference and STEM aspiration)
+\
+\
+
+### R Setup and Data import
+```{r setup}
+library(tidyverse)
+library(corrr)
+library(lcsm)
+library(ggpubr)
+library(paletteer)
+library(tidyLPA)
+knitr::opts_knit$set(root.dir = 'c:/LocalData/olivekez/Paper 1')
+
+#load dataset
+load("C:/LocalData/olivekez/Paper 1/STLfull1.Rdata") #full data
+load("~/Paper 1 - data/Working_data/STL6.Rdata") #wide data with only ID, sex, Asp, and averaged STV
+load("C:/LocalData/olivekez/Paper 1/STL6_STVmi.Rdata") #raw data with only ID and STV
+```
+
+# Data wrangling
+Taking only aggregated STV values (averaged), with ID, sex, and aspiration in sixth year and putting it into the **STL6_full** variable.\
+```{r Data wrangling: aggregated, long dataset}
+
+#We only need:
+#ID, sex, 
+#STV values (aggregated from three dimensions: ATTainment, UTility, and INTrinsic values), 
+#and aspiration in sixth year
+
+STL6_full <-
+  STLfulldata1 %>%
+  rowwise() %>%
+  rename(Asp = F_Q46_3) %>%
+  mutate(B_STV_attS = mean(c(B_Q11_1, B_Q12_1, B_Q13_1), na.rm = TRUE)) %>% 
+  # B = data from grade 2 | att = attainment value | S = science
+  mutate(B_STV_utS = mean(c(B_Q20_1, B_Q21_1, B_Q21b_1), na.rm = TRUE)) %>% # ut = utility value
+  mutate(B_STV_intvS = mean(c(B_Q24_1, B_Q25_1, B_Q26_1), na.rm = TRUE)) %>% # intv = intrinsic value
+  mutate(B_STV_S = mean(c(B_STV_attS, B_STV_intvS, B_STV_utS), na.rm = TRUE)) %>% 
+  #taking it together, B_STV_S = STV of year 2 in science: average of attainment, utility, and intrinsic value
+  mutate(B_STV_attM = mean(c(B_Q11_2, B_Q12_2, B_Q13_2), na.rm = TRUE)) %>% # M = math
+  mutate(B_STV_utM = mean(c(B_Q20_2, B_Q21_2, B_Q21b_2), na.rm = TRUE)) %>%
+  mutate(B_STV_intvM = mean(c(B_Q24_2, B_Q25_2, B_Q26_2), na.rm = TRUE)) %>%
+  mutate(B_STV_M = mean(c(B_STV_attM, B_STV_intvM, B_STV_utM), na.rm = TRUE)) %>%
+  mutate(B_STV_attF = mean(c(B_Q11_3, B_Q12_3, B_Q13_3), na.rm = TRUE)) %>% # F = finnish
+  mutate(B_STV_utF = mean(c(B_Q20_3, B_Q21_3, B_Q21b_3), na.rm = TRUE)) %>%
+  mutate(B_STV_intvF = mean(c(B_Q24_3, B_Q25_3, B_Q26_3), na.rm = TRUE)) %>%
+  mutate(B_STV_F = mean(c(B_STV_attF, B_STV_intvF, B_STV_utF), na.rm = TRUE)) %>%
+  mutate(C_STV_attS = mean(c(C_Q11_1, C_Q12_1, C_Q13_1), na.rm = TRUE)) %>% # C = data from grade 3
+  mutate(C_STV_utS = mean(c(C_Q20_1, C_Q21_1, C_Q21b_1), na.rm = TRUE)) %>%
+  mutate(C_STV_intvS = mean(c(C_Q24_1, C_Q25_1, C_Q26_1), na.rm = TRUE)) %>%
+  mutate(C_STV_S = mean(c(C_STV_attS, C_STV_intvS, C_STV_utS), na.rm = TRUE)) %>%
+  mutate(C_STV_attM = mean(c(C_Q11_2, C_Q12_2, C_Q13_2), na.rm = TRUE)) %>%
+  mutate(C_STV_utM = mean(c(C_Q20_2, C_Q21_2, C_Q21b_2), na.rm = TRUE)) %>%
+  mutate(C_STV_intvM = mean(c(C_Q24_2, C_Q25_2, C_Q26_2), na.rm = TRUE)) %>%
+  mutate(C_STV_M = mean(c(C_STV_attM, C_STV_intvM, C_STV_utM), na.rm = TRUE)) %>%
+  mutate(C_STV_attF = mean(c(C_Q11_3, C_Q12_3, C_Q13_3), na.rm = TRUE)) %>%
+  mutate(C_STV_utF = mean(c(C_Q20_3, C_Q21_3, C_Q21b_3), na.rm = TRUE)) %>%
+  mutate(C_STV_intvF = mean(c(C_Q24_3, C_Q25_3, C_Q26_3), na.rm = TRUE)) %>%
+  mutate(C_STV_F = mean(c(C_STV_attF, C_STV_intvF, C_STV_utF), na.rm = TRUE)) %>%
+  mutate(D_STV_attS = mean(c(D_Q11_1, D_Q12_1, D_Q13_1), na.rm = TRUE)) %>% # D = data from grade 4
+  mutate(D_STV_utS = mean(c(D_Q20_1, D_Q21_1, D_Q21b_1), na.rm = TRUE)) %>%
+  mutate(D_STV_intvS = mean(c(D_Q24_1, D_Q25_1, D_Q26_1), na.rm = TRUE)) %>%
+  mutate(D_STV_S = mean(c(D_STV_attS, D_STV_intvS, D_STV_utS), na.rm = TRUE)) %>%
+  mutate(D_STV_attM = mean(c(D_Q11_2, D_Q12_2, D_Q13_2), na.rm = TRUE)) %>%
+  mutate(D_STV_utM = mean(c(D_Q20_2, D_Q21_2, D_Q21b_2), na.rm = TRUE)) %>%
+  mutate(D_STV_intvM = mean(c(D_Q24_2, D_Q25_2, D_Q26_2), na.rm = TRUE)) %>%
+  mutate(D_STV_M = mean(c(D_STV_attM, D_STV_intvM, D_STV_utM), na.rm = TRUE)) %>%
+  mutate(D_STV_attF = mean(c(D_Q11_3, D_Q12_3, D_Q13_3), na.rm = TRUE)) %>%
+  mutate(D_STV_utF = mean(c(D_Q20_3, D_Q21_3, D_Q21b_3), na.rm = TRUE)) %>%
+  mutate(D_STV_intvF = mean(c(D_Q24_3, D_Q25_3, D_Q26_3), na.rm = TRUE)) %>%
+  mutate(D_STV_F = mean(c(D_STV_attF, D_STV_intvF, D_STV_utF), na.rm = TRUE)) %>%
+  mutate(E_STV_attS = mean(c(E_Q11_1, E_Q12_1, E_Q13_1), na.rm = TRUE)) %>% # E = grade 5
+  mutate(E_STV_utS = mean(c(E_Q20_1, E_Q21_1, E_Q21b_1), na.rm = TRUE)) %>%
+  mutate(E_STV_intvS = mean(c(E_Q24_1, E_Q25_1, E_Q26_1), na.rm = TRUE)) %>%
+  mutate(E_STV_S = mean(c(E_STV_attS, E_STV_intvS, E_STV_utS), na.rm = TRUE)) %>%
+  mutate(E_STV_attM = mean(c(E_Q11_2, E_Q12_2, E_Q13_2), na.rm = TRUE)) %>%
+  mutate(E_STV_utM = mean(c(E_Q20_2, E_Q21_2, E_Q21b_2), na.rm = TRUE)) %>%
+  mutate(E_STV_intvM = mean(c(E_Q24_2, E_Q25_2, E_Q26_2), na.rm = TRUE)) %>%
+  mutate(E_STV_M = mean(c(E_STV_attM, E_STV_intvM, E_STV_utM), na.rm = TRUE)) %>%
+  mutate(E_STV_attF = mean(c(E_Q11_3, E_Q12_3, E_Q13_3), na.rm = TRUE)) %>%
+  mutate(E_STV_utF = mean(c(E_Q20_3, E_Q21_3, E_Q21b_3), na.rm = TRUE)) %>%
+  mutate(E_STV_intvF = mean(c(E_Q24_3, E_Q25_3, E_Q26_3), na.rm = TRUE)) %>%
+  mutate(E_STV_F = mean(c(E_STV_attF, E_STV_intvF, E_STV_utF), na.rm = TRUE)) %>%
+  mutate(F_STV_attS = mean(c(F_Q11_1, F_Q12_1, F_Q13_1), na.rm = TRUE)) %>% # F = grade 6
+  mutate(F_STV_utS = mean(c(F_Q20_1, F_Q21_1, F_Q21b_1), na.rm = TRUE)) %>%
+  mutate(F_STV_intvS = mean(c(F_Q24_1, F_Q25_1, F_Q26_1), na.rm = TRUE)) %>%
+  mutate(F_STV_S = mean(c(F_STV_attS, F_STV_intvS, F_STV_utS), na.rm = TRUE)) %>%
+  mutate(F_STV_attM = mean(c(F_Q11_2, F_Q12_2, F_Q13_2), na.rm = TRUE)) %>%
+  mutate(F_STV_utM = mean(c(F_Q20_2, F_Q21_2, F_Q21b_2), na.rm = TRUE)) %>%
+  mutate(F_STV_intvM = mean(c(F_Q24_2, F_Q25_2, F_Q26_2), na.rm = TRUE)) %>%
+  mutate(F_STV_M = mean(c(F_STV_attM, F_STV_intvM, F_STV_utM), na.rm = TRUE)) %>%
+  mutate(F_STV_attF = mean(c(F_Q11_3, F_Q12_3, F_Q13_3), na.rm = TRUE)) %>%
+  mutate(F_STV_utF = mean(c(F_Q20_3, F_Q21_3, F_Q21b_3), na.rm = TRUE)) %>%
+  mutate(F_STV_intvF = mean(c(F_Q24_3, F_Q25_3, F_Q26_3), na.rm = TRUE)) %>%
+  mutate(F_STV_F = mean(c(F_STV_attF, F_STV_intvF, F_STV_utF), na.rm = TRUE)) %>%
+  select(ID, sex, Asp,
+         B_STV_S, B_STV_M, B_STV_F,
+         C_STV_S, C_STV_M, C_STV_F,
+         D_STV_S, D_STV_M, D_STV_F, 
+         E_STV_S, E_STV_M, E_STV_F,
+         F_STV_S, F_STV_M, F_STV_F)
+
+
+#long dataset
+STL6_long <-pivot_longer(STL6_full,
+                       cols = -c(ID, sex, Asp),
+                       names_to = c("wave", ".value", "domain"),
+                       names_pattern = ("(.)_(.*)_(.)"))
+
+STL6_long$STV[STL6_long$STV == 0] <- NA
+
+#mutating each relevant variable to factor
+STL6_long <- 
+  STL6_long %>% 
+  mutate(sex = factor(sex, levels = c(1,2),
+                      labels = c("Girl", "Boy"))) %>%
+  mutate(wave = factor(wave, levels = c("B", "C", "D", "E", "F"), 
+                       labels = c("year2", "year3", "year4", "year5", "year6"))) %>%
+  mutate(Asp = factor(Asp, levels = c(0,1,2),
+                      labels = c("No STEM", "STEM Prof", "STEM Sup"))) %>%
+  mutate(domain = factor(domain, levels = c("S","M","F"),
+                      labels = c("Science", "Math", "Language")))
+
+```
+  
+```{r Data wrangling: not aggregated dataset}
+STL6_na <-
+  STLfulldata1 %>%
+  rowwise() %>%
+  rename(Asp = F_Q46_3) %>%
+  mutate(B_STV_at_S = mean(c(B_Q11_1, B_Q12_1, B_Q13_1), na.rm = TRUE)) %>% 
+  # B = data from grade 2 | att = attainment value | S = science
+  mutate(B_STV_ut_S = mean(c(B_Q20_1, B_Q21_1, B_Q21b_1), na.rm = TRUE)) %>% # ut = utility value
+  mutate(B_STV_in_S = mean(c(B_Q24_1, B_Q25_1, B_Q26_1), na.rm = TRUE)) %>% # intv = intrinsic value
+  mutate(B_STV_at_M = mean(c(B_Q11_2, B_Q12_2, B_Q13_2), na.rm = TRUE)) %>% # M = math
+  mutate(B_STV_ut_M = mean(c(B_Q20_2, B_Q21_2, B_Q21b_2), na.rm = TRUE)) %>%
+  mutate(B_STV_in_M = mean(c(B_Q24_2, B_Q25_2, B_Q26_2), na.rm = TRUE)) %>%
+  mutate(B_STV_at_F = mean(c(B_Q11_3, B_Q12_3, B_Q13_3), na.rm = TRUE)) %>% # F = finnish
+  mutate(B_STV_ut_F = mean(c(B_Q20_3, B_Q21_3, B_Q21b_3), na.rm = TRUE)) %>%
+  mutate(B_STV_in_F = mean(c(B_Q24_3, B_Q25_3, B_Q26_3), na.rm = TRUE)) %>%
+  mutate(C_STV_at_S = mean(c(C_Q11_1, C_Q12_1, C_Q13_1), na.rm = TRUE)) %>% # C = data from grade 3
+  mutate(C_STV_ut_S = mean(c(C_Q20_1, C_Q21_1, C_Q21b_1), na.rm = TRUE)) %>%
+  mutate(C_STV_in_S = mean(c(C_Q24_1, C_Q25_1, C_Q26_1), na.rm = TRUE)) %>%
+  mutate(C_STV_at_M = mean(c(C_Q11_2, C_Q12_2, C_Q13_2), na.rm = TRUE)) %>%
+  mutate(C_STV_ut_M = mean(c(C_Q20_2, C_Q21_2, C_Q21b_2), na.rm = TRUE)) %>%
+  mutate(C_STV_in_M = mean(c(C_Q24_2, C_Q25_2, C_Q26_2), na.rm = TRUE)) %>%
+  mutate(C_STV_at_F = mean(c(C_Q11_3, C_Q12_3, C_Q13_3), na.rm = TRUE)) %>%
+  mutate(C_STV_ut_F = mean(c(C_Q20_3, C_Q21_3, C_Q21b_3), na.rm = TRUE)) %>%
+  mutate(C_STV_in_F = mean(c(C_Q24_3, C_Q25_3, C_Q26_3), na.rm = TRUE)) %>%
+  mutate(D_STV_at_S = mean(c(D_Q11_1, D_Q12_1, D_Q13_1), na.rm = TRUE)) %>% # D = data from grade 4
+  mutate(D_STV_ut_S = mean(c(D_Q20_1, D_Q21_1, D_Q21b_1), na.rm = TRUE)) %>%
+  mutate(D_STV_in_S = mean(c(D_Q24_1, D_Q25_1, D_Q26_1), na.rm = TRUE)) %>%
+  mutate(D_STV_at_M = mean(c(D_Q11_2, D_Q12_2, D_Q13_2), na.rm = TRUE)) %>%
+  mutate(D_STV_ut_M = mean(c(D_Q20_2, D_Q21_2, D_Q21b_2), na.rm = TRUE)) %>%
+  mutate(D_STV_in_M = mean(c(D_Q24_2, D_Q25_2, D_Q26_2), na.rm = TRUE)) %>%
+  mutate(D_STV_at_F = mean(c(D_Q11_3, D_Q12_3, D_Q13_3), na.rm = TRUE)) %>%
+  mutate(D_STV_ut_F = mean(c(D_Q20_3, D_Q21_3, D_Q21b_3), na.rm = TRUE)) %>%
+  mutate(D_STV_in_F = mean(c(D_Q24_3, D_Q25_3, D_Q26_3), na.rm = TRUE)) %>%
+  mutate(E_STV_at_S = mean(c(E_Q11_1, E_Q12_1, E_Q13_1), na.rm = TRUE)) %>% # E = grade 5
+  mutate(E_STV_ut_S = mean(c(E_Q20_1, E_Q21_1, E_Q21b_1), na.rm = TRUE)) %>%
+  mutate(E_STV_in_S = mean(c(E_Q24_1, E_Q25_1, E_Q26_1), na.rm = TRUE)) %>%
+  mutate(E_STV_at_M = mean(c(E_Q11_2, E_Q12_2, E_Q13_2), na.rm = TRUE)) %>%
+  mutate(E_STV_ut_M = mean(c(E_Q20_2, E_Q21_2, E_Q21b_2), na.rm = TRUE)) %>%
+  mutate(E_STV_in_M = mean(c(E_Q24_2, E_Q25_2, E_Q26_2), na.rm = TRUE)) %>%
+  mutate(E_STV_at_F = mean(c(E_Q11_3, E_Q12_3, E_Q13_3), na.rm = TRUE)) %>%
+  mutate(E_STV_ut_F = mean(c(E_Q20_3, E_Q21_3, E_Q21b_3), na.rm = TRUE)) %>%
+  mutate(E_STV_in_F = mean(c(E_Q24_3, E_Q25_3, E_Q26_3), na.rm = TRUE)) %>%
+  mutate(F_STV_at_S = mean(c(F_Q11_1, F_Q12_1, F_Q13_1), na.rm = TRUE)) %>% # F = grade 6
+  mutate(F_STV_ut_S = mean(c(F_Q20_1, F_Q21_1, F_Q21b_1), na.rm = TRUE)) %>%
+  mutate(F_STV_in_S = mean(c(F_Q24_1, F_Q25_1, F_Q26_1), na.rm = TRUE)) %>%
+  mutate(F_STV_at_M = mean(c(F_Q11_2, F_Q12_2, F_Q13_2), na.rm = TRUE)) %>%
+  mutate(F_STV_ut_M = mean(c(F_Q20_2, F_Q21_2, F_Q21b_2), na.rm = TRUE)) %>%
+  mutate(F_STV_in_M = mean(c(F_Q24_2, F_Q25_2, F_Q26_2), na.rm = TRUE)) %>%
+  mutate(F_STV_at_F = mean(c(F_Q11_3, F_Q12_3, F_Q13_3), na.rm = TRUE)) %>%
+  mutate(F_STV_ut_F = mean(c(F_Q20_3, F_Q21_3, F_Q21b_3), na.rm = TRUE)) %>%
+  mutate(F_STV_in_F = mean(c(F_Q24_3, F_Q25_3, F_Q26_3), na.rm = TRUE)) %>%
+  select(ID, sex, Asp,
+         B_STV_at_S, B_STV_ut_S, B_STV_in_S, 
+         B_STV_at_M, B_STV_ut_M, B_STV_in_M,
+         B_STV_at_F, B_STV_ut_F, B_STV_in_F,
+         C_STV_at_S, C_STV_ut_S, C_STV_in_S, 
+         C_STV_at_M, C_STV_ut_M, C_STV_in_M,
+         C_STV_at_F, C_STV_ut_F, C_STV_in_F,
+         D_STV_at_S, D_STV_ut_S, D_STV_in_S, 
+         D_STV_at_M, D_STV_ut_M, D_STV_in_M,
+         D_STV_at_F, D_STV_ut_F, D_STV_in_F,
+         E_STV_at_S, E_STV_ut_S, E_STV_in_S, 
+         E_STV_at_M, E_STV_ut_M, E_STV_in_M,
+         E_STV_at_F, E_STV_ut_F, E_STV_in_F,
+         F_STV_at_S, F_STV_ut_S, F_STV_in_S, 
+         F_STV_at_M, F_STV_ut_M, F_STV_in_M,
+         F_STV_at_F, F_STV_ut_F, F_STV_in_F)
+
+#long dataset
+STL6_long2 <-pivot_longer(STL6_na,
+                       cols = -c(ID, sex, Asp),
+                       names_to = c("wave", ".value", "domain"),
+                       names_pattern = ("(.)_STV_(.*)_(.)"))
+
+#mutating each relevant variable to factor
+STL6_long2 <- 
+  STL6_long2 %>% 
+  mutate(sex = factor(sex, levels = c(1,2),
+                      labels = c("Girl", "Boy"))) %>%
+  mutate(wave = factor(wave, levels = c("B", "C", "D", "E", "F"), 
+                       labels = c("year2", "year3", "year4", "year5", "year6"))) %>%
+  mutate(Asp = factor(Asp, levels = c(0,1,2),
+                      labels = c("No STEM", "STEM Prof", "STEM Sup"))) %>%
+  mutate(domain = factor(domain, levels = c("S","M","F"),
+                      labels = c("Science", "Math", "Language")))
+
+```
+  
+# Descriptive Visualization
+### Spaghetti plot
+To see individual trajectories
+```{r}
+# Exploring individual plots
+
+plot_trajectories(data = STL6, #using sum aggregate dataset
+                  id_var = "ID", 
+                  var_list = c("B_STV_S", "C_STV_S", "D_STV_S", "E_STV_S", "F_STV_S"),
+                  xlab = "Wave", ylab = "Value", connect_missing = F)
+```
+\
+
+### Plotting according to RQ
+
+```{r Plot - Subject x Wave}
+
+#Box+Violin plot: development of each subject's STV
+
+ggplot(STL6_long, aes(wave, STV, color = domain)) +
+  geom_violin(color="white") +
+  geom_boxplot(width=.2) +
+  scale_color_paletteer_d("nord::aurora") +
+  facet_wrap(~domain)+
+  labs(x = "School year", y = "Subjective Task Value", title = "Development of STV throughout school years") +
+  theme(strip.background = element_blank(), strip.text.x = element_blank())
+
+```
+From this box (+violin) plot, we can see that there are slight decreases of Subjective Task Value in all school subjects throughout time. 
+It is interesting to see that compared to the other subjects, students seems to value Math in all years, even if the trajectory is decreasing on average.
+  
+
+```{r Gender x Science STV}
+
+#Plotting each domain per gender:
+##Science STV development
+
+STL6_long_S <- filter(STL6_long, domain == "Science") 
+
+Plot_science <- ggplot(STL6_long_S, aes(wave, STV, color = sex)) +
+  geom_violin() +
+  geom_boxplot(width=.2) + theme_classic()
+
+Plot_science
+
+```
+\
+```{r Gender x Math STV}
+
+##Math STV development
+
+STL6_long_M <- filter(STL6_long, domain == "Math")
+
+Plot_math <- ggplot(STL6_long_M, aes(wave, STV, color = sex)) +
+  geom_violin() +
+  geom_boxplot(width=.2) + theme_classic()
+
+Plot_math
+
+```
+\
+```{r Gender x Finnish STV}
+
+##Finnish language STV development
+
+STL6_long_L <- filter(STL6_long, domain == "Language")
+
+Plot_lang <- ggplot(STL6_long_L, aes(wave, STV, color = sex)) +
+  geom_violin() +
+  geom_boxplot(width=.2) + theme_classic()
+
+Plot_lang
+```
+These plots also showed that there seems to be slight gender difference in how girls and boys' STV develop in each subject.
+
+# Item correlation
+
+```{r Correlation: Science STV wave 2}
+STL_STVmi %>%
+  select(B_STV_attS1:B_STV_intS3) %>%
+  correlate()
+```
+  
+```{r Correlation: Science STV attainment}
+
+STL_STVmi %>%
+  select(B_STV_attS1:B_STV_attS3, C_STV_attS1:C_STV_attS3, D_STV_attS1:D_STV_attS3) %>%
+  correlate()
+```
+  
+\
+\
+
+# LGA-Model
+These RQs will be examined using Latent Growth Analysis, by treating STV development throughout the years as a latent variable (consisting of attainment, utility, and intrinsic values -- see figure below) that predict aspiration, while its intercept and slope being predicted by gender.
+
+This is the model we are trying to achieve:\
+\
+![My model][id1]
+
+Checking CFA in MPlus (check file STL6 - CFA model)\
+\
+
+|Subject|Waves|Issue|
+|:--------|:--------|:--------|
+|Finnish|2,6|NA|
+|Finnish|4,6| NA|
+|Finnish|5,6| NA|
+|Finnish|2,3,6|NA|
+|Finnish|2,4,5|NA|
+|Finnish|2,5,6|F_INT6|
+|Finnish|3,5,6|F_INT6|
+|Finnish|4,5,6|F_INT6|
+|Finnish|2,3,4,5|NA|
+|Finnish|2,3,4,6|NA|
+|Finnish|2,3,4,5,6|F_INT6|
+|Math|5,6| NA|
+|Math|2,5,6| NA|
+|Math|3,5,6| NA|
+|Math|4,5,6|M_UT6|
+|Math|2,3,4,5| NA|
+|Math|2,3,4,6| NA|
+|Math|2,3,5,6| NA|
+|Math|3,4,5,6|M_UT6|
+|Math|2,3,4,5,6|M_INT5|
+|Science|3,5|NA|
+|Science|3,6|NA|
+|Science|4,5|S_INT5|
+|Science|4,6|NA|
+|Science|5,6|NA|
+|Science|2,3,4|NA|
+|Science|2,3,5|NA|
+|Science|2,3,6|NA|
+|Science|2,5,6|S_UT6|
+|Science|3,5,6|S_UT6|
+|Science|4,5,6|S_ATT6|
+|Science|2,3,4,5|S_INT5|
+|Science|2,3,4,6|NA|
+
+\
+\
+With the issues of linear dependency, we won't be able to move forward with the LGA approach, so we are now taking the person-oriented approach.
+
+# LPA approach
+
+### First trial
+1.  2nd grade math intrinsic value, math utility, math attainment, sci intrinsic value, sci utility, sci attainment, Finn intrinsic value, Finn utility, Finn attainment, (9) 
+
+2. 2nd math task value, sci task value, Finn task value 
+
+This is all done with equal variance and zero covariance.
+```{r tidyLPA First option}
+m0 <- 
+  STL6_na %>%
+  select(B_STV_at_S, B_STV_ut_S, B_STV_in_S, 
+         B_STV_at_M, B_STV_ut_M, B_STV_in_M,
+         B_STV_at_F, B_STV_ut_F, B_STV_in_F) %>%
+  single_imputation() %>%
+  estimate_profiles(1:10)
+
+get_fit(m0)
+```
+
+
+```{r tidyLPA Second option}
+m1 <- 
+  STL6_full %>%
+    select(B_STV_S, B_STV_M, B_STV_F) %>%
+    single_imputation() %>%
+    estimate_profiles(1:7)
+
+get_fit(m1)
+```
+
+
+[id1]:my model.png
