@@ -7,6 +7,12 @@ output: rmdformats::material
 # Introduction
 
 My project is titled **Gendered Pathways to STEM aspiration**, with a dataset of primary school students' interest (Subjective Task Value or STV) towards *math*, *science* and *Finnish* throughout the six years of primary school.\
+This study investigated the development patterns of primary school students’ subjective task values in three academic domains:  Science, Mathematics and Language (Finnish), taking into account gendered difference and the students’ STEM aspiration at the end of primary school. Data with five time points were collected from students from second grade to sixth grade in Helsinki, Finland. \
+
+
+### Theoretical Framework
+This study is framed by the suggested relationships from the expectancy value theory, which posits that a person's characteristics (in this case, their gender) will affect first their subjective task value, and finally, their academic outcome.
+![Situated Expectancy Value Theory][id1]
 
 ### Variables
 The variables to be used in this study are:
@@ -24,9 +30,11 @@ The variables to be used in this study are:
 ### Research Questions
 In this project, we are trying to answer several research questions:
 
-- What does the change in subject-specific Task Value (in math, science and Finnish) look like over time? (checking linear/quadratic change)
-- Are there gendered differences in the development of subject-specific Task Value? (checking Intercept/slope difference between boys and girls)
-- Does the Subjective Task Value development predict STEM aspiration at the end of primary school? (checking relationship between the possible gendered intercept-slope difference and STEM aspiration)
+- What pattern of STV in science, math and Finnish do elementary school students show? How stable are such patterns? How big a proportion of children show a particular pattern of STV?
+- How do the patterns of STV change from year 1 to year 6? What are the typical and conversely untypical developmental trajectories of change?
+-	To what extent do children’s gender predict the changes that occur in the STV patterns across time?
+- To what extent do children’s STV in science, math and Finnish predict their aspiration in year 6?
+
 \
 \
 
@@ -35,6 +43,7 @@ In this project, we are trying to answer several research questions:
 library(tidyverse)
 library(corrr)
 library(lcsm)
+library(Rmisc)
 library(ggpubr)
 library(paletteer)
 library(tidyLPA)
@@ -48,6 +57,8 @@ load("C:/LocalData/olivekez/Paper 1/STL6_STVmi.Rdata") #raw data with only ID an
 
 # Data wrangling
 Taking only aggregated STV values (averaged), with ID, sex, and aspiration in sixth year and putting it into the **STL6_full** variable.\
+
+## Aggregated long dataset
 ```{r Data wrangling: aggregated, long dataset}
 
 #We only need:
@@ -58,7 +69,7 @@ Taking only aggregated STV values (averaged), with ID, sex, and aspiration in si
 STL6_full <-
   STLfulldata1 %>%
   rowwise() %>%
-  rename(Asp = F_Q46_3) %>%
+  dplyr::rename(Asp = F_Q46_3) %>%
   mutate(B_STV_attS = mean(c(B_Q11_1, B_Q12_1, B_Q13_1), na.rm = TRUE)) %>% 
   # B = data from grade 2 | att = attainment value | S = science
   mutate(B_STV_utS = mean(c(B_Q20_1, B_Q21_1, B_Q21b_1), na.rm = TRUE)) %>% # ut = utility value
@@ -151,11 +162,12 @@ STL6_long <-
 
 ```
   
+## Not aggregated dataset
 ```{r Data wrangling: not aggregated dataset}
 STL6_na <-
   STLfulldata1 %>%
   rowwise() %>%
-  rename(Asp = F_Q46_3) %>%
+  dplyr::rename(Asp = F_Q46_3) %>%
   mutate(B_STV_at_S = mean(c(B_Q11_1, B_Q12_1, B_Q13_1), na.rm = TRUE)) %>% 
   # B = data from grade 2 | att = attainment value | S = science
   mutate(B_STV_ut_S = mean(c(B_Q20_1, B_Q21_1, B_Q21b_1), na.rm = TRUE)) %>% # ut = utility value
@@ -238,11 +250,25 @@ STL6_long2 <-
                       labels = c("Science", "Math", "Language")))
 
 ```
-  
+
+## Counting number of participants
+```{r counting N}
+STL6_long <- STL6_long %>%
+  mutate(STVfreq = factor(is.nan(STV),levels = c("FALSE", "TRUE"), labels = c("Yes", "NA")))
+
+STL6_long %>%
+  group_by(domain, wave) %>%
+  filter(STVfreq == "Yes") %>%
+  dplyr::count(STVfreq)
+
+#checking the N of each year, how many overlaps
+```
+
+
 # Descriptive Visualization
 ### Spaghetti plot
 To see individual trajectories
-```{r}
+```{r Spaghetti plot}
 # Exploring individual plots
 
 plot_trajectories(data = STL6, #using sum aggregate dataset
@@ -252,12 +278,31 @@ plot_trajectories(data = STL6, #using sum aggregate dataset
 ```
 \
 
-### Plotting according to RQ
+## Plotting according to RQ
 
-```{r Plot - Subject x Wave}
+Here are plots representing the average development of each subject's STV throughout the school years
 
-#Box+Violin plot: development of each subject's STV
+```{r Summarising STV per gender and subject}
+STL6_longc <- summarySE(STL6_long, measurevar="STV", groupvars= c("domain", "wave"), na.rm = T)
 
+STL6_longc
+```
+
+```{r Plot line graph}
+pd <- position_dodge(0.1) # move them .05 to the left and right
+
+ggplot(STL6_longc, aes(x=wave, y=STV, color=domain, group=domain)) +
+  geom_errorbar(aes(ymin=STV-se, ymax=STV+se), width=.1, position=pd) +
+  geom_line(position=pd) +
+  geom_point(position=pd) +
+  scale_color_paletteer_d("nord::aurora") +
+  labs(x = "School year", y = "Subjective Task Value", title = "Development of STV throughout school years") 
+
+```
+
+Here is a box and violin plot showing the distribution of the data in each subject throughout the year:
+
+```{r Plot - Subject x Wave, fig.width= 10}
 ggplot(STL6_long, aes(wave, STV, color = domain)) +
   geom_violin(color="white") +
   geom_boxplot(width=.2) +
@@ -267,11 +312,31 @@ ggplot(STL6_long, aes(wave, STV, color = domain)) +
   theme(strip.background = element_blank(), strip.text.x = element_blank())
 
 ```
-From this box (+violin) plot, we can see that there are slight decreases of Subjective Task Value in all school subjects throughout time. 
+
+From these plots, we can see that there are slight decreases of Subjective Task Value in all school subjects throughout time. 
 It is interesting to see that compared to the other subjects, students seems to value Math in all years, even if the trajectory is decreasing on average.
   
+## Plotting gendered difference in STV development
 
-```{r Gender x Science STV}
+```{r Gender x STV lineplot, fig.width=15, fig.height=7 }
+
+#data summary
+STL6_longc1 <- summarySE(STL6_long, measurevar="STV", groupvars= c("sex", "wave", "domain"), na.rm = T)
+
+STL6_longc1
+
+#lineplot
+ggplot(STL6_longc1, aes(x=wave, y=STV, color=sex, group=sex)) +
+  geom_errorbar(aes(ymin=STV-se, ymax=STV+se), width=.1, position=pd) +
+  geom_line(position=pd) +
+  geom_point(position=pd) +
+  facet_wrap(~domain) +
+  labs(x = "School year", y = "Subjective Task Value", title = "Development of STV throughout school years") 
+```
+
+Here is a box and violin plot showing the distribution of the data for each gender throughout the year:
+
+```{r Gender x STV box-violinplot, fig.height=10}
 
 #Plotting each domain per gender:
 ##Science STV development
@@ -280,13 +345,8 @@ STL6_long_S <- filter(STL6_long, domain == "Science")
 
 Plot_science <- ggplot(STL6_long_S, aes(wave, STV, color = sex)) +
   geom_violin() +
-  geom_boxplot(width=.2) + theme_classic()
-
-Plot_science
-
-```
-\
-```{r Gender x Math STV}
+  geom_boxplot(width=.2) + theme_classic() +
+  labs(x = "School year", y = "STV", title = "Gendered Development of Science STV throughout school years")
 
 ##Math STV development
 
@@ -294,41 +354,186 @@ STL6_long_M <- filter(STL6_long, domain == "Math")
 
 Plot_math <- ggplot(STL6_long_M, aes(wave, STV, color = sex)) +
   geom_violin() +
-  geom_boxplot(width=.2) + theme_classic()
+  geom_boxplot(width=.2) + theme_classic()+
+  labs(x = "School year", y = "STV")
 
-Plot_math
-
-```
-\
-```{r Gender x Finnish STV}
-
-##Finnish language STV development
+#Finnish STV development
 
 STL6_long_L <- filter(STL6_long, domain == "Language")
 
 Plot_lang <- ggplot(STL6_long_L, aes(wave, STV, color = sex)) +
   geom_violin() +
-  geom_boxplot(width=.2) + theme_classic()
+  geom_boxplot(width=.2) + theme_classic()+
+  labs(x = "School year", y = "STV")
 
-Plot_lang
+#All plots
+ggarrange(Plot_science, Plot_math, Plot_lang, 
+          labels = c("S", "M", "L"),
+          ncol = 1)
 ```
+
+
 These plots also showed that there seems to be slight gender difference in how girls and boys' STV develop in each subject.
 
-# Item correlation
+# Item correlation, reliability
+Here we are checking the correlation between the Subjective Task Value items measuring Attainment (3 items), Utility (3 items), and Intrinsic Values (3 items).
+We are checking it per year (year 2-6) and per subjects (Science, Math, and Finnish).
 
-```{r Correlation: Science STV wave 2}
-STL_STVmi %>%
-  select(B_STV_attS1:B_STV_intS3) %>%
+## Year 2
+```{r Correlation: Grade 2 - Science STV}
+#Year 2 Science STV: corr of items measuring Attainment (3), Utility (3) and Intrinsic (3)
+
+B_STV.S_corr <- STLfulldata1 %>%
+  select(B_Q11_1, B_Q12_1, B_Q13_1, B_Q20_1, B_Q21_1, B_Q21b_1, B_Q24_1, B_Q25_1, B_Q26_1) %>%
   correlate()
+
+B_STV.S_corr
 ```
   
-```{r Correlation: Science STV attainment}
+```{r Correlation: Grade 2 - Math STV}
+#Year 2 Math STV
 
-STL_STVmi %>%
-  select(B_STV_attS1:B_STV_attS3, C_STV_attS1:C_STV_attS3, D_STV_attS1:D_STV_attS3) %>%
+B_STV.M_corr <- STLfulldata1 %>%
+  select(B_Q11_2, B_Q12_2, B_Q13_2, B_Q20_2, B_Q21_2, B_Q21b_2, B_Q24_2, B_Q25_2, B_Q26_2) %>%
   correlate()
+
+B_STV.M_corr
+```
+    
+```{r Correlation: Grade 2 - Finnish STV}
+#Year 2 Finnish STV
+
+B_STV.F_corr <- STLfulldata1 %>%
+  select(B_Q11_3, B_Q12_3, B_Q13_3,B_Q20_3, B_Q21_3, B_Q21b_3, B_Q24_3, B_Q25_3, B_Q26_3) %>%
+  correlate()
+
+B_STV.F_corr
+```
+
+
+## Year 3
+```{r Correlation: Grade 3 - Science STV}
+#Year 3 Science STV: corr of items measuring Attainment (3), Utility (3) and Intrinsic (3)
+
+C_STV.S_corr <- STLfulldata1 %>%
+  select(C_Q11_1, C_Q12_1, C_Q13_1, C_Q20_1, C_Q21_1, C_Q21b_1, C_Q24_1, C_Q25_1, C_Q26_1) %>%
+  correlate()
+
+C_STV.S_corr
 ```
   
+```{r Correlation: Grade 3 - Math STV}
+#Year 3 Math STV
+
+C_STV.M_corr <- STLfulldata1 %>%
+  select(C_Q11_2, C_Q12_2, C_Q13_2, C_Q20_2, C_Q21_2, C_Q21b_2, C_Q24_2, C_Q25_2, C_Q26_2) %>%
+  correlate()
+
+C_STV.M_corr
+```
+    
+```{r Correlation: Grade 3 - Finnish STV}
+#Year 3 Finnish STV
+
+C_STV.F_corr <- STLfulldata1 %>%
+  select(C_Q11_3, C_Q12_3, C_Q13_3, C_Q20_3, C_Q21_3, C_Q21b_3, C_Q24_3, C_Q25_3, C_Q26_3) %>%
+  correlate()
+
+C_STV.F_corr
+```
+
+## Year 4
+```{r Correlation: Grade 4 - Science STV}
+#Year 4 Science STV: corr of items measuring Attainment (3), Utility (3) and Intrinsic (3)
+
+D_STV.S_corr <- STLfulldata1 %>%
+  select(D_Q11_1, D_Q12_1, D_Q13_1, D_Q20_1, D_Q21_1, D_Q21b_1, D_Q24_1, D_Q25_1, D_Q26_1) %>%
+  correlate()
+
+D_STV.S_corr
+```
+  
+```{r Correlation: Grade 4 - Math STV}
+#Year 4 Math STV
+
+D_STV.M_corr <- STLfulldata1 %>%
+  select(D_Q11_2, D_Q12_2, D_Q13_2, D_Q20_2, D_Q21_2, D_Q21b_2, D_Q24_2, D_Q25_2, D_Q26_2) %>%
+  correlate()
+
+D_STV.M_corr
+```
+    
+```{r Correlation: Grade 4 - Finnish STV}
+#Year 4 Finnish STV
+
+D_STV.F_corr <- STLfulldata1 %>%
+  select(D_Q11_3, D_Q12_3, D_Q13_3, D_Q20_3, D_Q21_3, D_Q21b_3, D_Q24_3, D_Q25_3, D_Q26_3) %>%
+  correlate()
+
+D_STV.F_corr
+```
+
+## Year 5
+```{r Correlation: Grade 5 - Science STV}
+#Year 5 Science STV: corr of items measuring Attainment (3), Utility (3) and Intrinsic (3)
+
+E_STV.S_corr <- STLfulldata1 %>%
+  select(E_Q11_1, E_Q12_1, E_Q13_1, E_Q20_1, E_Q21_1, E_Q21b_1, E_Q24_1, E_Q25_1, E_Q26_1) %>%
+  correlate()
+
+E_STV.S_corr
+```
+  
+```{r Correlation: Grade 5 - Math STV}
+#Year 5 Math STV
+
+E_STV.M_corr <- STLfulldata1 %>%
+  select(E_Q11_2,E_Q12_2, E_Q13_2, E_Q20_2, E_Q21_2, E_Q21b_2, E_Q24_2, E_Q25_2, E_Q26_2) %>%
+  correlate()
+
+E_STV.M_corr
+```
+    
+```{r Correlation: Grade 5 - Finnish STV}
+#Year 5 Finnish STV
+
+E_STV.F_corr <- STLfulldata1 %>%
+  select(E_Q11_3, E_Q12_3, E_Q13_3, E_Q20_3, E_Q21_3, E_Q21b_3, E_Q24_3, E_Q25_3, E_Q26_3) %>%
+  correlate()
+
+E_STV.F_corr
+```
+
+## Year 6
+```{r Correlation: Grade 6 - Science STV}
+#Year 6 Science STV: corr of items measuring Attainment (3), Utility (3) and Intrinsic (3)
+
+F_STV.S_corr <- STLfulldata1 %>%
+  select(F_Q11_1, F_Q12_1, F_Q13_1, F_Q20_1, F_Q21_1, F_Q21b_1, F_Q24_1, F_Q25_1, F_Q26_1) %>%
+  correlate()
+
+F_STV.S_corr
+```
+  
+```{r Correlation: Grade 6 - Math STV}
+#Year 6 Math STV
+
+F_STV.M_corr <- STLfulldata1 %>%
+  select(F_Q11_2,F_Q12_2, F_Q13_2, F_Q20_2, F_Q21_2, F_Q21b_2, F_Q24_2, F_Q25_2, F_Q26_2) %>%
+  correlate()
+
+F_STV.M_corr
+```
+    
+```{r Correlation: Grade 6 - Finnish STV}
+#Year 6 Finnish STV
+
+F_STV.F_corr <- STLfulldata1 %>%
+  select(F_Q11_3, F_Q12_3, F_Q13_3, F_Q20_3, F_Q21_3, F_Q21b_3, F_Q24_3, F_Q25_3, F_Q26_3) %>%
+  correlate()
+
+F_STV.F_corr
+```
 \
 \
 
@@ -337,7 +542,7 @@ These RQs will be examined using Latent Growth Analysis, by treating STV develop
 
 This is the model we are trying to achieve:\
 \
-![My model][id1]
+![My model](my_model.png)
 
 Checking CFA in MPlus (check file STL6 - CFA model)\
 \
@@ -384,34 +589,91 @@ With the issues of linear dependency, we won't be able to move forward with the 
 
 # LPA approach
 
-### First trial
-1.  2nd grade math intrinsic value, math utility, math attainment, sci intrinsic value, sci utility, sci attainment, Finn intrinsic value, Finn utility, Finn attainment, (9) 
-
-2. 2nd math task value, sci task value, Finn task value 
+### Fourth grade profiles
+1. 4th grade math intrinsic value, math utility, math attainment, sci intrinsic value, sci utility, sci attainment, Finn intrinsic value, Finn utility, Finn attainment, (9) 
+2. 4th math task value, sci task value, Finn task value 
 
 This is all done with equal variance and zero covariance.
-```{r tidyLPA First option}
-m0 <- 
-  STL6_na %>%
-  select(B_STV_at_S, B_STV_ut_S, B_STV_in_S, 
-         B_STV_at_M, B_STV_ut_M, B_STV_in_M,
-         B_STV_at_F, B_STV_ut_F, B_STV_in_F) %>%
+```{r tidyLPA 4th grade First option - four profiles}
+#starting from 4th grade, check the best solution for the profiles
+#use standardized values
+#plot with a better plot?
+
+#trying out fourth grade, standardized values
+STL6_na %>%
+  select(D_STV_at_S, D_STV_ut_S, D_STV_in_S, 
+         D_STV_at_M, D_STV_ut_M, D_STV_in_M,
+         D_STV_at_F, D_STV_ut_F, D_STV_in_F) %>%
+  scale()%>%
   single_imputation() %>%
-  estimate_profiles(1:10)
+  estimate_profiles(4:6) %>%
+  plot_profiles(ci= 0.95, sd=F, rawdata =F, add_line = T)
 
-get_fit(m0)
 ```
-
-
-```{r tidyLPA Second option}
-m1 <- 
-  STL6_full %>%
-    select(B_STV_S, B_STV_M, B_STV_F) %>%
+```{r tidyLPA 4th grade Second option}
+STL6_full %>%
+    select(D_STV_S, D_STV_M, D_STV_F) %>%
+    scale() %>%
     single_imputation() %>%
-    estimate_profiles(1:7)
+    estimate_profiles(3:5) %>%
+    plot_profiles(ci= 0.95, sd=F, rawdata =F, add_line = T)
 
-get_fit(m1)
+```
+
+### Fifth grade profiles
+1. 5th grade math intrinsic value, math utility, math attainment, sci intrinsic value, sci utility, sci attainment, Finn intrinsic value, Finn utility, Finn attainment (9)
+2. 5th grade math task value, sci task value, Finn task value
+
+```{r tidyLPA 5th grade first option}
+STL6_na %>%
+   select(E_STV_at_S, E_STV_ut_S, E_STV_in_S, 
+          E_STV_at_M, E_STV_ut_M, E_STV_in_M,
+          E_STV_at_F, E_STV_ut_F, E_STV_in_F) %>%
+  scale() %>%
+  single_imputation() %>%
+  estimate_profiles(4:6) %>%
+  plot_profiles(ci= 0.95, sd=F, rawdata =F, add_line = T)
+
+
 ```
 
 
-[id1]:my model.png
+```{r tidyLPA 5th grade second option}
+STL6_full %>%
+    select(E_STV_S, E_STV_M, E_STV_F) %>%
+  scale()%>%
+    single_imputation() %>%
+    estimate_profiles(3:5) %>%
+    plot_profiles(ci= 0.95, sd=F, rawdata =F, add_line = T)
+
+```
+
+### Sixth grade profiles
+1. 6th grade math intrinsic value, math utility, math attainment, sci intrinsic value, sci utility, sci attainment, Finn intrinsic value, Finn utility, Finn attainment (9)
+2. 6th grade math task value, sci task value, Finn task value
+
+```{r tidyLPA 6th grade first option}
+STL6_na %>%
+   select(F_STV_at_S, F_STV_ut_S, F_STV_in_S, 
+          F_STV_at_M, F_STV_ut_M, F_STV_in_M,
+          F_STV_at_F, F_STV_ut_F, F_STV_in_F) %>%
+  scale() %>%
+  single_imputation() %>%
+  estimate_profiles(4:6) %>%
+  plot_profiles(ci= 0.95, sd=F, rawdata =F, add_line = T)
+
+
+```
+
+
+```{r tidyLPA 6th grade second option}
+STL6_full %>%
+    select(F_STV_S, F_STV_M, F_STV_F) %>%
+  scale() %>%
+    single_imputation() %>%
+    estimate_profiles(3:5) %>%
+    plot_profiles(ci= 0.95, sd=F, rawdata =F, add_line = T)
+
+```
+
+[id1]:EVT_model.png 
