@@ -1,0 +1,3016 @@
+Mplus VERSION 8.6
+MUTHEN & MUTHEN
+03/16/2022  11:00 AM
+
+INPUT INSTRUCTIONS
+
+  TITLE: STL - LTA with Asp based on Dispersion similarity partial - covar-equal
+  DATA: FILE = y56LTA2_1.dat;
+
+  VARIABLE: NAMES ARE
+    E_SC_S E_STV_S E_SC_M E_STV_M E_SC_F E_STV_F
+    ID SEX E_ASP F_ASP
+    SCORE_S SCORE_M SCORE_F
+    E_CPROB1 E_CPROB2 E_CPROB3 E_CPROB4 Y5
+    F_SC_S F_STV_S F_SC_M F_STV_M F_SC_F F_STV_F
+    F_CPROB1 F_CPROB2 F_CPROB3 F_CPROB4 Y6
+    ;
+
+    USEVARIABLES ARE
+    Y5 Y6 SCORE_S
+    !SEX
+    ;
+
+    USEOBSERVATIONS = sex EQ 2;
+
+    NOMINAL = Y5 Y6;
+
+    MISSING =*;
+
+    CLASSES = T5(4) T6(4);
+
+  ANALYSIS:	
+     	TYPE = MIXTURE;
+    	ESTIMATOR=MLR;
+    	processors = 4;
+      STARTS = 0;
+
+  MODEL:
+  %OVERALL%
+
+  T6 ON T5;
+
+  MODEL T5:
+       	%T5#1%
+       	
+       	[Y5#1@13.455]; [Y5#2@12.603]; [Y5#3@8.579];
+
+
+       	%T5#2%
+       	
+       	[Y5#1@1.71]; [Y5#2@4.713]; [Y5#3@1.162];
+
+
+          %T5#3%
+       	
+       	[Y5#1@-0.779]; [Y5#2@2.185]; [Y5#3@2.726];
+                                   	
+
+          %T5#4%
+       	
+       	[Y5#1@-13.443]; [Y5#2@-0.913]; [Y5#3@-2.999];
+
+         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  MODEL T6:
+          %T6#1%
+       	
+       	[Y6#1@13.484]; [Y6#2@12.545]; [Y6#3@7.12];
+                            	     	
+       	[SCORE_S] (oa1);
+
+          %T6#2%
+       	
+       	[Y6#1@1.236]; [Y6#2@5.078]; [Y6#3@1.438];
+
+          [SCORE_S] (oa2);
+       	
+          %T6#3%
+       	
+       	[Y6#1@-2.315]; [Y6#2@2.302]; [Y6#3@2.747];
+
+          [SCORE_S] (oa3);
+
+       	%T6#4%
+       	
+       	[Y6#1@-13.426]; [Y6#2@-0.948]; [Y6#3@-2.417];
+
+          [SCORE_S] (oa4);
+
+  MODEL CONSTRAINT:
+  NEW (y12);
+  y12 = oa1-oa2;
+  NEW (y13);
+  y13 = oa1-oa3;
+  NEW (y14);
+  y14 = oa1-oa4;
+  NEW (y23);
+  y23 = oa2-oa3;
+  NEW (y24);
+  y24 = oa2-oa4;
+  NEW (y34);
+  y34 = oa3-oa4;
+
+  NEW (T1);
+  T1 = oa1;
+  NEW (T2);
+  T2 = oa2;
+  NEW (T3);
+  T3 = oa3;
+  NEW (T4);
+  T4 = oa4;
+
+  OUTPUT: CINTERVAL RESIDUAL SVALUES TECH1 TECH7 TECH15;
+
+
+
+*** WARNING in MODEL command
+  All variables are uncorrelated with all other variables within class.
+  Check that this is what is intended.
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+STL - LTA with Asp based on Dispersion similarity partial - covar-equal
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         160
+
+Number of dependent variables                                    3
+Number of independent variables                                  0
+Number of continuous latent variables                            0
+Number of categorical latent variables                           2
+
+Observed dependent variables
+
+  Continuous
+   SCORE_S
+
+  Unordered categorical (nominal)
+   Y5          Y6
+
+Categorical latent variables
+   T5          T6
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-03
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-03
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-03
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-03
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Parameterization                                             LOGIT
+
+Input data file(s)
+  y56LTA2_1.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             2
+     Number of y missing data patterns           2
+     Number of u missing data patterns           0
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              SCORE_S
+              ________
+ SCORE_S        0.750
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    Y5
+      Category 1    0.306           49.000
+      Category 2    0.550           88.000
+      Category 3    0.062           10.000
+      Category 4    0.081           13.000
+    Y6
+      Category 1    0.246           28.000
+      Category 2    0.588           67.000
+      Category 3    0.061            7.000
+      Category 4    0.105           12.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     SCORE_S               8.417       0.025       7.000   18.33%       8.000      8.000      8.000
+             120.000       0.860      -0.869      10.000   12.50%       9.000      9.000
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS       0.130D-11.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 15, T6#1 ON T5#2
+
+     ONE OR MORE MULTINOMIAL LOGIT PARAMETERS WERE FIXED TO AVOID SINGULARITY
+     OF THE INFORMATION MATRIX.  THE SINGULARITY IS MOST LIKELY BECAUSE THE
+     MODEL IS NOT IDENTIFIED, OR BECAUSE OF EMPTY CELLS IN THE JOINT
+     DISTRIBUTION OF THE CATEGORICAL LATENT VARIABLES AND ANY INDEPENDENT
+     VARIABLES.  THE FOLLOWING PARAMETERS WERE FIXED:
+     Parameter 18, T6#1 ON T5#3
+     Parameter 14, T6#3 ON T5#1
+     Parameter 20, T6#3 ON T5#3
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       20
+
+Loglikelihood
+
+          H0 Value                        -425.491
+          H0 Scaling Correction Factor      0.7237
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                     890.982
+          Bayesian (BIC)                   952.485
+          Sample-Size Adjusted BIC         889.172
+            (n* = (n + 2) / 24)
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR EACH LATENT CLASS VARIABLE
+BASED ON THE ESTIMATED MODEL
+
+  Latent Class
+    Variable    Class
+
+    T5             1        65.45886          0.40912
+                   2        64.23619          0.40148
+                   3        13.15112          0.08219
+                   4        17.15383          0.10721
+    T6             1        48.26190          0.30164
+                   2        73.90397          0.46190
+                   3        12.33067          0.07707
+                   4        25.50347          0.15940
+
+
+CLASSIFICATION QUALITY
+
+     Entropy                         0.650
+
+
+LATENT CLASS INDICATOR MEANS AND PROBABILITIES FOR EACH LATENT CLASS
+
+     MEAN/PROBABILITY PROFILES FOR T6
+                       Latent class
+                     1      2      3      4
+     SCORE_S       8.950  8.389  7.932  7.632
+
+
+LATENT TRANSITION PROBABILITIES BASED ON THE ESTIMATED MODEL
+
+  T5 Classes (Rows) by T6 Classes (Columns)
+
+            1        2        3        4
+
+   1     0.699    0.265    0.036    0.000
+   2     0.000    0.784    0.002    0.214
+   3     0.000    0.397    0.603    0.000
+   4     0.146    0.056    0.111    0.686
+
+
+TRANSITION PROBABILITY ODDS
+
+     TRANSITION TABLE ODDS AND 95% CONFIDENCE INTERVALS FOR T5 TO T6
+           1.000(   1.000,   1.000)      0.379(   0.119,   1.210)      0.052(   0.003,   0.861)      0.000(   0.000,   0
+           0.000(   0.000,   0.014)      1.000(   1.000,   1.000)      0.002(   0.000,9133.195)      0.272(   0.090,   0
+           0.000(   0.000,   0.000)      0.657(   0.026,  16.424)      1.000(   1.000,   1.000)      0.000(   0.000,   0
+           0.213(   0.022,   2.090)      0.082(   0.000, 479.624)      0.162(   0.003,   8.553)      1.000(   1.000,   1
+
+
+C-SPECIFIC CLASSIFICATION RESULTS
+
+Classification Quality for T5
+
+     Entropy                         0.608
+
+Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
+by Latent Class (Column)
+
+           1        2        3        4
+
+    1   0.927    0.062    0.005    0.006
+    2   0.155    0.733    0.056    0.056
+    3   0.023    0.153    0.787    0.037
+    4   0.000    0.041    0.040    0.920
+
+
+Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+           1        2        3        4
+
+    1   0.807    0.189    0.004    0.000
+    2   0.055    0.913    0.024    0.008
+    3   0.021    0.341    0.598    0.039
+    4   0.020    0.262    0.021    0.697
+
+
+Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+              1        2        3        4
+
+    1     13.577   12.125    8.148    0.000
+    2      1.893    4.703    1.060    0.000
+    3     -0.600    2.166    2.728    0.000
+    4     -3.544   -0.980   -3.480    0.000
+
+Classification Quality for T6
+
+     Entropy                         0.550
+
+Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
+by Latent Class (Column)
+
+           1        2        3        4
+
+    1   0.875    0.113    0.009    0.003
+    2   0.145    0.712    0.047    0.096
+    3   0.013    0.267    0.613    0.106
+    4   0.034    0.060    0.053    0.853
+
+
+Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+           1        2        3        4
+
+    1   0.707    0.277    0.003    0.013
+    2   0.060    0.886    0.040    0.015
+    3   0.028    0.347    0.548    0.077
+    4   0.004    0.348    0.046    0.602
+
+
+Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+              1        2        3        4
+
+    1      4.019    3.083   -1.462    0.000
+    2      1.406    4.100    0.996    0.000
+    3     -1.025    1.501    1.956    0.000
+    4     -4.993   -0.548   -2.573    0.000
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Parameters in the Overall Part of the Model (Parameters Equal in All of the Classes)
+
+ Variances
+    SCORE_S            0.662      0.090      7.371      0.000
+
+Parameters for Class-specific Model Parts of T5
+
+Latent Class T5#1
+
+ Means
+    Y5#1              13.455      0.000    999.000    999.000
+    Y5#2              12.603      0.000    999.000    999.000
+    Y5#3               8.579      0.000    999.000    999.000
+
+Latent Class T5#2
+
+ Means
+    Y5#1               1.710      0.000    999.000    999.000
+    Y5#2               4.713      0.000    999.000    999.000
+    Y5#3               1.162      0.000    999.000    999.000
+
+Latent Class T5#3
+
+ Means
+    Y5#1              -0.779      0.000    999.000    999.000
+    Y5#2               2.185      0.000    999.000    999.000
+    Y5#3               2.726      0.000    999.000    999.000
+
+Latent Class T5#4
+
+ Means
+    Y5#1             -13.443      0.000    999.000    999.000
+    Y5#2              -0.913      0.000    999.000    999.000
+    Y5#3              -2.999      0.000    999.000    999.000
+
+Parameters for Class-specific Model Parts of T6
+
+Latent Class T6#1
+
+ Means
+    SCORE_S            8.950      0.195     45.948      0.000
+
+ Means
+    Y6#1              13.484      0.000    999.000    999.000
+    Y6#2              12.545      0.000    999.000    999.000
+    Y6#3               7.120      0.000    999.000    999.000
+
+Latent Class T6#2
+
+ Means
+    SCORE_S            8.389      0.145     57.704      0.000
+
+ Means
+    Y6#1               1.236      0.000    999.000    999.000
+    Y6#2               5.078      0.000    999.000    999.000
+    Y6#3               1.438      0.000    999.000    999.000
+
+Latent Class T6#3
+
+ Means
+    SCORE_S            7.932      0.250     31.667      0.000
+
+ Means
+    Y6#1              -2.315      0.000    999.000    999.000
+    Y6#2               2.302      0.000    999.000    999.000
+    Y6#3               2.747      0.000    999.000    999.000
+
+Latent Class T6#4
+
+ Means
+    SCORE_S            7.632      0.200     38.193      0.000
+
+ Means
+    Y6#1             -13.426      0.000    999.000    999.000
+    Y6#2              -0.948      0.000    999.000    999.000
+    Y6#3              -2.417      0.000    999.000    999.000
+
+Categorical Latent Variables
+
+ T6#1     ON
+    T5#1            3485.942      2.595   1343.299      0.000
+    T5#2              -5.262      2.314     -2.274      0.023
+    T5#3              -2.309      0.000    999.000    999.000
+
+ T6#2     ON
+    T5#1            3485.926      5.416    643.650      0.000
+    T5#2               3.800      4.516      0.841      0.400
+    T5#3              23.448      5.580      4.202      0.000
+
+ T6#3     ON
+    T5#1            3483.263      0.000    999.000    999.000
+    T5#2              -3.025      8.108     -0.373      0.709
+    T5#3              23.191      0.000    999.000    999.000
+
+ Means
+    T5#1               1.339      0.337      3.973      0.000
+    T5#2               1.320      0.366      3.604      0.000
+    T5#3              -0.266      0.527     -0.504      0.614
+    T6#1              -1.546      1.165     -1.327      0.184
+    T6#2              -2.500      4.425     -0.565      0.572
+    T6#3              -1.822      2.025     -0.900      0.368
+
+New/Additional Parameters
+    Y12                0.561      0.269      2.084      0.037
+    Y13                1.018      0.325      3.132      0.002
+    Y14                1.318      0.290      4.547      0.000
+    Y23                0.457      0.306      1.496      0.135
+    Y24                0.757      0.254      2.978      0.003
+    Y34                0.300      0.321      0.936      0.350
+    T1                 8.950      0.195     45.948      0.000
+    T2                 8.389      0.145     57.704      0.000
+    T3                 7.932      0.250     31.667      0.000
+    T4                 7.632      0.200     38.193      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.247E-09
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Parameters in the Overall Part of the Model (Parameters Equal in All of the Classes)
+
+ Variances
+    SCORE_S          0.431       0.486       0.514       0.662       0.810       0.838       0.894
+
+Parameters for Class-specific Model Parts of T5
+
+Latent Class T5#1
+
+ Means
+    Y5#1            13.455      13.455      13.455      13.455      13.455      13.455      13.455
+    Y5#2            12.603      12.603      12.603      12.603      12.603      12.603      12.603
+    Y5#3             8.579       8.579       8.579       8.579       8.579       8.579       8.579
+
+Latent Class T5#2
+
+ Means
+    Y5#1             1.710       1.710       1.710       1.710       1.710       1.710       1.710
+    Y5#2             4.713       4.713       4.713       4.713       4.713       4.713       4.713
+    Y5#3             1.162       1.162       1.162       1.162       1.162       1.162       1.162
+
+Latent Class T5#3
+
+ Means
+    Y5#1            -0.779      -0.779      -0.779      -0.779      -0.779      -0.779      -0.779
+    Y5#2             2.185       2.185       2.185       2.185       2.185       2.185       2.185
+    Y5#3             2.726       2.726       2.726       2.726       2.726       2.726       2.726
+
+Latent Class T5#4
+
+ Means
+    Y5#1           -13.443     -13.443     -13.443     -13.443     -13.443     -13.443     -13.443
+    Y5#2            -0.913      -0.913      -0.913      -0.913      -0.913      -0.913      -0.913
+    Y5#3            -2.999      -2.999      -2.999      -2.999      -2.999      -2.999      -2.999
+
+Parameters for Class-specific Model Parts of T6
+
+Latent Class T6#1
+
+ Means
+    SCORE_S          8.448       8.568       8.630       8.950       9.271       9.332       9.452
+
+ Means
+    Y6#1            13.484      13.484      13.484      13.484      13.484      13.484      13.484
+    Y6#2            12.545      12.545      12.545      12.545      12.545      12.545      12.545
+    Y6#3             7.120       7.120       7.120       7.120       7.120       7.120       7.120
+
+Latent Class T6#2
+
+ Means
+    SCORE_S          8.015       8.104       8.150       8.389       8.628       8.674       8.764
+
+ Means
+    Y6#1             1.236       1.236       1.236       1.236       1.236       1.236       1.236
+    Y6#2             5.078       5.078       5.078       5.078       5.078       5.078       5.078
+    Y6#3             1.438       1.438       1.438       1.438       1.438       1.438       1.438
+
+Latent Class T6#3
+
+ Means
+    SCORE_S          7.287       7.441       7.520       7.932       8.344       8.423       8.577
+
+ Means
+    Y6#1            -2.315      -2.315      -2.315      -2.315      -2.315      -2.315      -2.315
+    Y6#2             2.302       2.302       2.302       2.302       2.302       2.302       2.302
+    Y6#3             2.747       2.747       2.747       2.747       2.747       2.747       2.747
+
+Latent Class T6#4
+
+ Means
+    SCORE_S          7.117       7.240       7.303       7.632       7.961       8.024       8.147
+
+ Means
+    Y6#1           -13.426     -13.426     -13.426     -13.426     -13.426     -13.426     -13.426
+    Y6#2            -0.948      -0.948      -0.948      -0.948      -0.948      -0.948      -0.948
+    Y6#3            -2.417      -2.417      -2.417      -2.417      -2.417      -2.417      -2.417
+
+Categorical Latent Variables
+
+ T6#1     ON
+    T5#1          3479.258    3480.856    3481.674    3485.942    3490.211    3491.029    3492.627
+    T5#2           -11.223      -9.798      -9.069      -5.262      -1.455      -0.726       0.699
+    T5#3            -2.309      -2.309      -2.309      -2.309      -2.309      -2.309      -2.309
+
+ T6#2     ON
+    T5#1          3471.975    3475.311    3477.016    3485.926    3494.835    3496.541    3499.876
+    T5#2            -7.833      -5.052      -3.629       3.800      11.229      12.651      15.432
+    T5#3             9.075      12.512      14.269      23.448      32.627      34.385      37.821
+
+ T6#3     ON
+    T5#1          3483.263    3483.263    3483.263    3483.263    3483.263    3483.263    3483.263
+    T5#2           -23.909     -18.916     -16.362      -3.025      10.312      12.866      17.859
+    T5#3            23.191      23.191      23.191      23.191      23.191      23.191      23.191
+
+ Means
+    T5#1             0.471       0.678       0.785       1.339       1.894       2.000       2.208
+    T5#2             0.377       0.602       0.718       1.320       1.923       2.038       2.264
+    T5#3            -1.623      -1.299      -1.133      -0.266       0.601       0.767       1.092
+    T6#1            -4.547      -3.830      -3.463      -1.546       0.370       0.737       1.455
+    T6#2           -13.897     -11.172      -9.779      -2.500       4.779       6.173       8.898
+    T6#3            -7.037      -5.790      -5.153      -1.822       1.509       2.146       3.393
+
+New/Additional Parameters
+    Y12             -0.132       0.033       0.118       0.561       1.004       1.089       1.254
+    Y13              0.181       0.381       0.483       1.018       1.553       1.656       1.856
+    Y14              0.571       0.750       0.841       1.318       1.795       1.887       2.065
+    Y23             -0.330      -0.142      -0.046       0.457       0.960       1.057       1.245
+    Y24              0.102       0.259       0.339       0.757       1.176       1.256       1.412
+    Y34             -0.526      -0.328      -0.227       0.300       0.827       0.928       1.126
+    T1               8.448       8.568       8.630       8.950       9.271       9.332       9.452
+    T2               8.015       8.104       8.150       8.389       8.628       8.674       8.764
+    T3               7.287       7.441       7.520       7.932       8.344       8.423       8.577
+    T4               7.117       7.240       7.303       7.632       7.961       8.024       8.147
+
+
+MODEL COMMAND WITH FINAL ESTIMATES USED AS STARTING VALUES
+
+     %OVERALL%
+
+     t6#1 ON t5#1*3485.94238;
+     t6#1 ON t5#2*-5.26183;
+     t6#1 ON t5#3*-2.30887;
+     t6#2 ON t5#1*3485.92554;
+     t6#2 ON t5#2*3.79986;
+     t6#2 ON t5#3*23.44831;
+     t6#3 ON t5#1*3483.26318;
+     t6#3 ON t5#2*-3.02485;
+     t6#3 ON t5#3*23.19072;
+
+     [ t5#1*1.33920 ];
+     [ t5#2*1.32035 ];
+     [ t5#3*-0.26572 ];
+     [ t6#1*-1.54630 ];
+     [ t6#2*-2.49967 ];
+     [ t6#3*-1.82204 ];
+
+     score_s*0.66228 (2);
+
+
+  MODEL T5:
+
+     %T5#1%
+
+     [ y5#1@13.45500 ];
+     [ y5#2@12.60300 ];
+     [ y5#3@8.57900 ];
+
+     %T5#2%
+
+     [ y5#1@1.71000 ];
+     [ y5#2@4.71300 ];
+     [ y5#3@1.16200 ];
+
+     %T5#3%
+
+     [ y5#1@-0.77900 ];
+     [ y5#2@2.18500 ];
+     [ y5#3@2.72600 ];
+
+     %T5#4%
+
+     [ y5#1@-13.44300 ];
+     [ y5#2@-0.91300 ];
+     [ y5#3@-2.99900 ];
+
+  MODEL T6:
+
+     %T6#1%
+
+     [ score_s*8.95016 ] (oa1);
+     [ y6#1@13.48400 ];
+     [ y6#2@12.54500 ];
+     [ y6#3@7.12000 ];
+
+     %T6#2%
+
+     [ score_s*8.38918 ] (oa2);
+     [ y6#1@1.23600 ];
+     [ y6#2@5.07800 ];
+     [ y6#3@1.43800 ];
+
+     %T6#3%
+
+     [ score_s*7.93185 ] (oa3);
+     [ y6#1@-2.31500 ];
+     [ y6#2@2.30200 ];
+     [ y6#3@2.74700 ];
+
+     %T6#4%
+
+     [ score_s*7.63192 ] (oa4);
+     [ y6#1@-13.42600 ];
+     [ y6#2@-0.94800 ];
+     [ y6#3@-2.41700 ];
+
+     ! NEW statements in MODEL CONSTRAINT
+     NEW(y12*0.56098);
+     NEW(y13*1.01831);
+     NEW(y14*1.31824);
+     NEW(y23*0.45733);
+     NEW(y24*0.75726);
+     NEW(y34*0.29993);
+     NEW(t1*8.95016);
+     NEW(t2*8.38918);
+     NEW(t3*7.93185);
+     NEW(t4*7.63192);
+
+
+
+
+RESIDUAL OUTPUT
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 1 1
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                8.950
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+                0.032
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.100
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 1 2
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                8.389
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+               -0.023
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.059
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 1 3
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                7.932
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+               -0.375
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S       -0.098
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 1 4
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                7.632
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+               -0.086
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S       -0.126
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 2 1
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                8.950
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+               -0.293
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S       -0.073
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 2 2
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                8.389
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+                0.014
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.031
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 2 3
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                7.932
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+                0.112
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S       -0.183
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 2 4
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                7.632
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+                0.104
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S       -0.065
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 3 1
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                8.950
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+               -0.368
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S       -0.162
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 3 2
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                8.389
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+               -0.056
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S       -0.237
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 3 3
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                7.932
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+                0.117
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S       -0.419
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 3 4
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                7.632
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+                0.173
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S       -0.181
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 4 1
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                8.950
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+               -0.654
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S       -0.348
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 4 2
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                8.389
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+               -0.038
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S       -0.101
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 4 3
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                7.932
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+                0.066
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S       -0.352
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 4 4
+
+
+           Model Estimated Means
+              SCORE_S
+              ________
+                7.632
+
+
+           Residuals for Means
+              SCORE_S
+              ________
+               -0.125
+
+
+           Model Estimated Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.662
+
+
+           Residuals for Covariances
+              SCORE_S
+              ________
+ SCORE_S       -0.230
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 1 1
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.707          0.697                  0.010                0.151
+       Category 1        0.290          0.297                 -0.008               -0.114
+       Category 2        0.003          0.005                 -0.003               -0.236
+       Category 3        0.000          0.000                  0.000                0.000
+     Y6
+       Category 0        0.716          0.718                 -0.002               -0.034
+       Category 1        0.284          0.281                  0.003                0.047
+       Category 2        0.000          0.001                 -0.001               -0.158
+       Category 3        0.000          0.000                  0.000               -0.004
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 1 2
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.697          0.697                  0.000                0.000
+       Category 1        0.297          0.297                  0.000                0.000
+       Category 2        0.005          0.005                  0.000                0.000
+       Category 3        0.000          0.000                  0.000                0.000
+     Y6
+       Category 0        0.021          0.020                  0.001                0.029
+       Category 1        0.961          0.949                  0.013                0.236
+       Category 2        0.015          0.025                 -0.010               -0.257
+       Category 3        0.002          0.006                 -0.004               -0.212
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 1 3
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.700          0.697                  0.003                0.010
+       Category 1        0.294          0.297                 -0.003               -0.010
+       Category 2        0.005          0.005                  0.000                0.001
+       Category 3        0.000          0.000                  0.000                0.000
+     Y6
+       Category 0        0.005          0.004                  0.001                0.025
+       Category 1        0.387          0.374                  0.012                0.040
+       Category 2        0.597          0.584                  0.012                0.038
+       Category 3        0.012          0.037                 -0.026               -0.208
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 1 4
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.552          0.697                 -0.145                0.000
+       Category 1        0.444          0.297                  0.146                0.000
+       Category 2        0.004          0.005                 -0.001                0.000
+       Category 3        0.000          0.000                  0.000                0.000
+     Y6
+       Category 0        0.000          0.000                  0.000                0.000
+       Category 1        0.490          0.262                  0.228                0.000
+       Category 2        0.145          0.060                  0.084                0.000
+       Category 3        0.365          0.677                 -0.312                0.000
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 2 1
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.048          0.046                  0.002                0.001
+       Category 1        0.929          0.920                  0.009                0.004
+       Category 2        0.014          0.026                 -0.012               -0.009
+       Category 3        0.009          0.008                  0.001                0.001
+     Y6
+       Category 0        0.698          0.718                 -0.020               -0.005
+       Category 1        0.301          0.281                  0.020                0.005
+       Category 2        0.001          0.001                  0.000                0.000
+       Category 3        0.000          0.000                  0.000                0.000
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 2 2
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.046          0.046                  0.000                0.000
+       Category 1        0.920          0.920                  0.000                0.000
+       Category 2        0.026          0.026                  0.000                0.000
+       Category 3        0.008          0.008                  0.000                0.000
+     Y6
+       Category 0        0.026          0.020                  0.006                0.307
+       Category 1        0.941          0.949                 -0.008               -0.255
+       Category 2        0.026          0.025                  0.001                0.039
+       Category 3        0.007          0.006                  0.001                0.089
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 2 3
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.046          0.046                  0.001                0.001
+       Category 1        0.919          0.920                 -0.001               -0.001
+       Category 2        0.027          0.026                  0.000                0.001
+       Category 3        0.008          0.008                  0.000                0.000
+     Y6
+       Category 0        0.006          0.004                  0.003                0.015
+       Category 1        0.373          0.374                 -0.002               -0.001
+       Category 2        0.580          0.584                 -0.005               -0.003
+       Category 3        0.041          0.037                  0.004                0.006
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 2 4
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.025          0.046                 -0.021               -0.366
+       Category 1        0.952          0.920                  0.032                0.440
+       Category 2        0.015          0.026                 -0.012               -0.271
+       Category 3        0.008          0.008                  0.000                0.003
+     Y6
+       Category 0        0.000          0.000                  0.000                0.004
+       Category 1        0.255          0.262                 -0.007               -0.061
+       Category 2        0.051          0.060                 -0.009               -0.141
+       Category 3        0.694          0.677                  0.016                0.129
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 3 1
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.026          0.018                  0.008                0.000
+       Category 1        0.478          0.347                  0.131                0.000
+       Category 2        0.440          0.596                 -0.156                0.000
+       Category 3        0.057          0.039                  0.018                0.000
+     Y6
+       Category 0        0.547          0.718                 -0.171                0.000
+       Category 1        0.452          0.281                  0.171                0.000
+       Category 2        0.002          0.001                  0.000                0.000
+       Category 3        0.000          0.000                  0.000                0.000
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 3 2
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.018          0.018                  0.000                0.000
+       Category 1        0.347          0.347                  0.000                0.000
+       Category 2        0.596          0.596                  0.000                0.000
+       Category 3        0.039          0.039                  0.000                0.000
+     Y6
+       Category 0        0.012          0.020                 -0.008               -0.132
+       Category 1        0.960          0.949                  0.011                0.117
+       Category 2        0.025          0.025                  0.000               -0.001
+       Category 3        0.003          0.006                 -0.003               -0.091
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 3 3
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.018          0.018                  0.000                0.001
+       Category 1        0.343          0.347                 -0.004               -0.021
+       Category 2        0.599          0.596                  0.003                0.020
+       Category 3        0.039          0.039                  0.000                0.002
+     Y6
+       Category 0        0.003          0.004                 -0.001               -0.041
+       Category 1        0.369          0.374                 -0.006               -0.034
+       Category 2        0.611          0.584                  0.027                0.155
+       Category 3        0.017          0.037                 -0.020               -0.304
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 3 4
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.013          0.018                 -0.005                0.000
+       Category 1        0.486          0.347                  0.139                0.000
+       Category 2        0.448          0.596                 -0.148                0.000
+       Category 3        0.053          0.039                  0.014                0.000
+     Y6
+       Category 0        0.000          0.000                  0.000                0.000
+       Category 1        0.402          0.262                  0.139                0.000
+       Category 2        0.096          0.060                  0.036                0.000
+       Category 3        0.502          0.677                 -0.175                0.000
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 4 1
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.000          0.000                  0.000                0.000
+       Category 1        0.269          0.277                 -0.007               -0.026
+       Category 2        0.018          0.034                 -0.016               -0.143
+       Category 3        0.713          0.689                  0.024                0.082
+     Y6
+       Category 0        0.740          0.718                  0.022                0.077
+       Category 1        0.259          0.281                 -0.021               -0.076
+       Category 2        0.001          0.001                  0.000               -0.020
+       Category 3        0.000          0.000                  0.000               -0.001
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 4 2
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.000          0.000                  0.000                0.000
+       Category 1        0.276          0.277                  0.000                0.000
+       Category 2        0.034          0.034                  0.000                0.000
+       Category 3        0.689          0.689                  0.000                0.000
+     Y6
+       Category 0        0.035          0.020                  0.015                0.104
+       Category 1        0.937          0.949                 -0.012               -0.054
+       Category 2        0.024          0.025                 -0.001               -0.007
+       Category 3        0.004          0.006                 -0.002               -0.023
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 4 3
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.000          0.000                  0.000                0.000
+       Category 1        0.274          0.277                 -0.003               -0.008
+       Category 2        0.035          0.034                  0.000                0.002
+       Category 3        0.692          0.689                  0.003                0.007
+     Y6
+       Category 0        0.008          0.004                  0.004                0.086
+       Category 1        0.370          0.374                 -0.004               -0.013
+       Category 2        0.589          0.584                  0.005                0.013
+       Category 3        0.034          0.037                 -0.004               -0.029
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 4 4
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.000          0.000                  0.000               -0.002
+       Category 1        0.286          0.277                  0.010                0.074
+       Category 2        0.019          0.034                 -0.015               -0.288
+       Category 3        0.695          0.689                  0.006                0.042
+     Y6
+       Category 0        0.000          0.000                  0.000                0.003
+       Category 1        0.255          0.262                 -0.007               -0.054
+       Category 2        0.054          0.060                 -0.006               -0.093
+       Category 3        0.691          0.677                  0.013                0.099
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 1 1
+
+
+           NU
+              SCORE_S
+              ________
+                    1
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 1 2
+
+
+           NU
+              SCORE_S
+              ________
+                    3
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 1 3
+
+
+           NU
+              SCORE_S
+              ________
+                    4
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 1 4
+
+
+           NU
+              SCORE_S
+              ________
+                    5
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 2 1
+
+
+           NU
+              SCORE_S
+              ________
+                    1
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 2 2
+
+
+           NU
+              SCORE_S
+              ________
+                    3
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 2 3
+
+
+           NU
+              SCORE_S
+              ________
+                    4
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 2 4
+
+
+           NU
+              SCORE_S
+              ________
+                    5
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 3 1
+
+
+           NU
+              SCORE_S
+              ________
+                    1
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 3 2
+
+
+           NU
+              SCORE_S
+              ________
+                    3
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 3 3
+
+
+           NU
+              SCORE_S
+              ________
+                    4
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 3 4
+
+
+           NU
+              SCORE_S
+              ________
+                    5
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 4 1
+
+
+           NU
+              SCORE_S
+              ________
+                    1
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 4 2
+
+
+           NU
+              SCORE_S
+              ________
+                    3
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 4 3
+
+
+           NU
+              SCORE_S
+              ________
+                    4
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 4 4
+
+
+           NU
+              SCORE_S
+              ________
+                    5
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S            2
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS REGRESSION MODEL PART
+
+
+           ALPHA(C)
+              T5#1          T5#2          T5#3          T5#4          T6#1
+              ________      ________      ________      ________      ________
+                    6             7             8             0             9
+
+
+           ALPHA(C)
+              T6#2          T6#3          T6#4
+              ________      ________      ________
+                   10            11             0
+
+
+           BETA(C)
+              T5#1          T5#2          T5#3          T5#4
+              ________      ________      ________      ________
+ T6#1              12            15            18             0
+ T6#2              13            16            19             0
+ T6#3              14            17            20             0
+ T6#4               0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR THE CENSORED/NOMINAL/COUNT MODEL PART
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 1
+              Y6#3
+              ________
+                    0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 2
+              Y6#3
+              ________
+                    0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 3
+              Y6#3
+              ________
+                    0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 4
+              Y6#3
+              ________
+                    0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 1
+              Y6#3
+              ________
+                    0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 2
+              Y6#3
+              ________
+                    0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 3
+              Y6#3
+              ________
+                    0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 4
+              Y6#3
+              ________
+                    0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 1
+              Y6#3
+              ________
+                    0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 2
+              Y6#3
+              ________
+                    0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 3
+              Y6#3
+              ________
+                    0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 4
+              Y6#3
+              ________
+                    0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 1
+              Y6#3
+              ________
+                    0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 2
+              Y6#3
+              ________
+                    0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 3
+              Y6#3
+              ________
+                    0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 4
+              Y6#3
+              ________
+                    0
+
+
+     PARAMETER SPECIFICATION FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              Y12           Y13           Y14           Y23           Y24
+              ________      ________      ________      ________      ________
+                   21            22            23            24            25
+
+
+           NEW/ADDITIONAL PARAMETERS
+              Y34           T1            T2            T3            T4
+              ________      ________      ________      ________      ________
+                   26            27            28            29            30
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 1 1
+
+
+           NU
+              SCORE_S
+              ________
+                8.185
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 1 2
+
+
+           NU
+              SCORE_S
+              ________
+                8.417
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 1 3
+
+
+           NU
+              SCORE_S
+              ________
+                8.417
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 1 4
+
+
+           NU
+              SCORE_S
+              ________
+                8.648
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 2 1
+
+
+           NU
+              SCORE_S
+              ________
+                8.185
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 2 2
+
+
+           NU
+              SCORE_S
+              ________
+                8.417
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 2 3
+
+
+           NU
+              SCORE_S
+              ________
+                8.417
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 2 4
+
+
+           NU
+              SCORE_S
+              ________
+                8.648
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 3 1
+
+
+           NU
+              SCORE_S
+              ________
+                8.185
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 3 2
+
+
+           NU
+              SCORE_S
+              ________
+                8.417
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 3 3
+
+
+           NU
+              SCORE_S
+              ________
+                8.417
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 3 4
+
+
+           NU
+              SCORE_S
+              ________
+                8.648
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 4 1
+
+
+           NU
+              SCORE_S
+              ________
+                8.185
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 4 2
+
+
+           NU
+              SCORE_S
+              ________
+                8.417
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 4 3
+
+
+           NU
+              SCORE_S
+              ________
+                8.417
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 4 4
+
+
+           NU
+              SCORE_S
+              ________
+                8.648
+
+
+           THETA
+              SCORE_S
+              ________
+ SCORE_S        0.430
+
+
+     STARTING VALUES FOR LATENT CLASS REGRESSION MODEL PART
+
+
+           ALPHA(C)
+              T5#1          T5#2          T5#3          T5#4          T6#1
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA(C)
+              T6#2          T6#3          T6#4
+              ________      ________      ________
+                0.000         0.000         0.000
+
+
+           BETA(C)
+              T5#1          T5#2          T5#3          T5#4
+              ________      ________      ________      ________
+ T6#1           0.000         0.000         0.000         0.000
+ T6#2           0.000         0.000         0.000         0.000
+ T6#3           0.000         0.000         0.000         0.000
+ T6#4           0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR THE CENSORED/NOMINAL/COUNT MODEL PART
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               13.455        12.603         8.579        13.484        12.545
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 1
+              Y6#3
+              ________
+                7.120
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               13.455        12.603         8.579         1.236         5.078
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 2
+              Y6#3
+              ________
+                1.438
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               13.455        12.603         8.579        -2.315         2.302
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 3
+              Y6#3
+              ________
+                2.747
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               13.455        12.603         8.579       -13.426        -0.948
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 4
+              Y6#3
+              ________
+               -2.417
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                1.710         4.713         1.162        13.484        12.545
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 1
+              Y6#3
+              ________
+                7.120
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                1.710         4.713         1.162         1.236         5.078
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 2
+              Y6#3
+              ________
+                1.438
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                1.710         4.713         1.162        -2.315         2.302
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 3
+              Y6#3
+              ________
+                2.747
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                1.710         4.713         1.162       -13.426        -0.948
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 4
+              Y6#3
+              ________
+               -2.417
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               -0.779         2.185         2.726        13.484        12.545
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 1
+              Y6#3
+              ________
+                7.120
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               -0.779         2.185         2.726         1.236         5.078
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 2
+              Y6#3
+              ________
+                1.438
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               -0.779         2.185         2.726        -2.315         2.302
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 3
+              Y6#3
+              ________
+                2.747
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               -0.779         2.185         2.726       -13.426        -0.948
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 4
+              Y6#3
+              ________
+               -2.417
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+              -13.443        -0.913        -2.999        13.484        12.545
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 1
+              Y6#3
+              ________
+                7.120
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+              -13.443        -0.913        -2.999         1.236         5.078
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 2
+              Y6#3
+              ________
+                1.438
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+              -13.443        -0.913        -2.999        -2.315         2.302
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 3
+              Y6#3
+              ________
+                2.747
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+              -13.443        -0.913        -2.999       -13.426        -0.948
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 4
+              Y6#3
+              ________
+               -2.417
+
+
+     STARTING VALUES FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              Y12           Y13           Y14           Y23           Y24
+              ________      ________      ________      ________      ________
+                0.500         0.500         0.500         0.500         0.500
+
+
+           NEW/ADDITIONAL PARAMETERS
+              Y34           T1            T2            T3            T4
+              ________      ________      ________      ________      ________
+                0.500         0.500         0.500         0.500         0.500
+
+
+TECHNICAL 7 OUTPUT
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 1 1
+
+
+           Means
+              SCORE_S
+              ________
+                8.982
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.762
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 1 2
+
+
+           Means
+              SCORE_S
+              ________
+                8.366
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.722
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 1 3
+
+
+           Means
+              SCORE_S
+              ________
+                7.557
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.564
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 1 4
+
+
+           Means
+              SCORE_S
+              ________
+                7.546
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.536
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 2 1
+
+
+           Means
+              SCORE_S
+              ________
+                8.657
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.589
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 2 2
+
+
+           Means
+              SCORE_S
+              ________
+                8.403
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.693
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 2 3
+
+
+           Means
+              SCORE_S
+              ________
+                8.043
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.480
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 2 4
+
+
+           Means
+              SCORE_S
+              ________
+                7.736
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.597
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 3 1
+
+
+           Means
+              SCORE_S
+              ________
+                8.582
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.500
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 3 2
+
+
+           Means
+              SCORE_S
+              ________
+                8.333
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.425
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 3 3
+
+
+           Means
+              SCORE_S
+              ________
+                8.049
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.243
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 3 4
+
+
+           Means
+              SCORE_S
+              ________
+                7.805
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.481
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 4 1
+
+
+           Means
+              SCORE_S
+              ________
+                8.296
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.314
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 4 2
+
+
+           Means
+              SCORE_S
+              ________
+                8.351
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.561
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 4 3
+
+
+           Means
+              SCORE_S
+              ________
+                7.998
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.310
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 4 4
+
+
+           Means
+              SCORE_S
+              ________
+                7.507
+
+
+           Covariances
+              SCORE_S
+              ________
+ SCORE_S        0.432
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 1 1
+
+     Variable
+     Y5
+       Category 1        0.707
+       Category 2        0.290
+       Category 3        0.003
+       Category 4        0.000
+     Y6
+       Category 1        0.716
+       Category 2        0.284
+       Category 3        0.000
+       Category 4        0.000
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 1 2
+
+     Variable
+     Y5
+       Category 1        0.697
+       Category 2        0.297
+       Category 3        0.005
+       Category 4        0.000
+     Y6
+       Category 1        0.021
+       Category 2        0.961
+       Category 3        0.015
+       Category 4        0.002
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 1 3
+
+     Variable
+     Y5
+       Category 1        0.700
+       Category 2        0.294
+       Category 3        0.005
+       Category 4        0.000
+     Y6
+       Category 1        0.005
+       Category 2        0.387
+       Category 3        0.597
+       Category 4        0.012
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 1 4
+
+     Variable
+     Y5
+       Category 1        0.552
+       Category 2        0.444
+       Category 3        0.004
+       Category 4        0.000
+     Y6
+       Category 1        0.000
+       Category 2        0.490
+       Category 3        0.145
+       Category 4        0.365
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 2 1
+
+     Variable
+     Y5
+       Category 1        0.048
+       Category 2        0.929
+       Category 3        0.014
+       Category 4        0.009
+     Y6
+       Category 1        0.698
+       Category 2        0.301
+       Category 3        0.001
+       Category 4        0.000
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 2 2
+
+     Variable
+     Y5
+       Category 1        0.046
+       Category 2        0.920
+       Category 3        0.026
+       Category 4        0.008
+     Y6
+       Category 1        0.026
+       Category 2        0.941
+       Category 3        0.026
+       Category 4        0.007
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 2 3
+
+     Variable
+     Y5
+       Category 1        0.046
+       Category 2        0.919
+       Category 3        0.027
+       Category 4        0.008
+     Y6
+       Category 1        0.006
+       Category 2        0.373
+       Category 3        0.580
+       Category 4        0.041
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 2 4
+
+     Variable
+     Y5
+       Category 1        0.025
+       Category 2        0.952
+       Category 3        0.015
+       Category 4        0.008
+     Y6
+       Category 1        0.000
+       Category 2        0.255
+       Category 3        0.051
+       Category 4        0.694
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 3 1
+
+     Variable
+     Y5
+       Category 1        0.026
+       Category 2        0.478
+       Category 3        0.440
+       Category 4        0.057
+     Y6
+       Category 1        0.547
+       Category 2        0.452
+       Category 3        0.002
+       Category 4        0.000
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 3 2
+
+     Variable
+     Y5
+       Category 1        0.018
+       Category 2        0.347
+       Category 3        0.596
+       Category 4        0.039
+     Y6
+       Category 1        0.012
+       Category 2        0.960
+       Category 3        0.025
+       Category 4        0.003
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 3 3
+
+     Variable
+     Y5
+       Category 1        0.018
+       Category 2        0.343
+       Category 3        0.599
+       Category 4        0.039
+     Y6
+       Category 1        0.003
+       Category 2        0.369
+       Category 3        0.611
+       Category 4        0.017
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 3 4
+
+     Variable
+     Y5
+       Category 1        0.013
+       Category 2        0.486
+       Category 3        0.448
+       Category 4        0.053
+     Y6
+       Category 1        0.000
+       Category 2        0.402
+       Category 3        0.096
+       Category 4        0.502
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 4 1
+
+     Variable
+     Y5
+       Category 1        0.000
+       Category 2        0.269
+       Category 3        0.018
+       Category 4        0.713
+     Y6
+       Category 1        0.740
+       Category 2        0.259
+       Category 3        0.001
+       Category 4        0.000
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 4 2
+
+     Variable
+     Y5
+       Category 1        0.000
+       Category 2        0.276
+       Category 3        0.034
+       Category 4        0.689
+     Y6
+       Category 1        0.035
+       Category 2        0.937
+       Category 3        0.024
+       Category 4        0.004
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 4 3
+
+     Variable
+     Y5
+       Category 1        0.000
+       Category 2        0.274
+       Category 3        0.035
+       Category 4        0.692
+     Y6
+       Category 1        0.008
+       Category 2        0.370
+       Category 3        0.589
+       Category 4        0.034
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 4 4
+
+     Variable
+     Y5
+       Category 1        0.000
+       Category 2        0.286
+       Category 3        0.019
+       Category 4        0.695
+     Y6
+       Category 1        0.000
+       Category 2        0.255
+       Category 3        0.054
+       Category 4        0.691
+
+
+TECHNICAL 15 OUTPUT
+
+
+     ESTIMATED CONDITIONAL PROBABILITIES FOR THE LATENT CLASS VARIABLES
+
+     P(T5=1)=0.409
+     P(T5=2)=0.401
+     P(T5=3)=0.082
+     P(T5=4)=0.107
+
+
+     P(T6=1|T5=1)=0.699
+     P(T6=2|T5=1)=0.265
+     P(T6=3|T5=1)=0.036
+     P(T6=4|T5=1)=0.000
+
+
+     P(T6=1|T5=2)=0.000
+     P(T6=2|T5=2)=0.784
+     P(T6=3|T5=2)=0.002
+     P(T6=4|T5=2)=0.214
+
+
+     P(T6=1|T5=3)=0.000
+     P(T6=2|T5=3)=0.397
+     P(T6=3|T5=3)=0.603
+     P(T6=4|T5=3)=0.000
+
+
+     P(T6=1|T5=4)=0.146
+     P(T6=2|T5=4)=0.056
+     P(T6=3|T5=4)=0.111
+     P(T6=4|T5=4)=0.686
+
+
+     ESTIMATED MARGINAL PROBABILITIES FOR THE LATENT CLASS VARIABLES
+
+     P(T6=1)=0.302
+     P(T6=2)=0.462
+     P(T6=3)=0.077
+     P(T6=4)=0.159
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THE ESTIMATED MODEL
+
+  Latent Class
+    Pattern
+
+    1  1         45.73832          0.28586
+    1  2         17.33822          0.10836
+    1  3          2.38232          0.01489
+    1  4          0.00000          0.00000
+    2  1          0.01517          0.00009
+    2  2         50.38440          0.31490
+    2  3          0.10781          0.00067
+    2  4         13.72881          0.08581
+    3  1          0.00000          0.00000
+    3  2          5.21450          0.03259
+    3  3          7.93662          0.04960
+    3  4          0.00000          0.00000
+    4  1          2.50841          0.01568
+    4  2          0.96684          0.00604
+    4  3          1.90392          0.01190
+    4  4         11.77467          0.07359
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON ESTIMATED POSTERIOR PROBABILITIES
+
+  Latent Class
+    Pattern
+
+    1  1         45.73597          0.28585
+    1  2         17.33908          0.10837
+    1  3          2.38102          0.01488
+    1  4          0.00000          0.00000
+    2  1          0.01463          0.00009
+    2  2         50.39120          0.31495
+    2  3          0.10679          0.00067
+    2  4         13.72486          0.08578
+    3  1          0.00000          0.00000
+    3  2          5.21526          0.03260
+    3  3          7.93506          0.04959
+    3  4          0.00000          0.00000
+    4  1          2.51115          0.01569
+    4  2          0.96723          0.00605
+    4  3          1.90237          0.01189
+    4  4         11.77538          0.07360
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR EACH LATENT CLASS VARIABLE
+BASED ON ESTIMATED POSTERIOR PROBABILITIES
+
+  Latent Class
+    Variable    Class
+
+    T5             1        65.45607          0.40910
+                   2        64.23748          0.40148
+                   3        13.15032          0.08219
+                   4        17.15613          0.10723
+    T6             1        48.26175          0.30164
+                   2        73.91278          0.46195
+                   3        12.32523          0.07703
+                   4        25.50024          0.15938
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THEIR MOST LIKELY LATENT CLASS PATTERN
+
+Class Counts and Proportions
+
+  Latent Class
+    Pattern
+
+    1  1               38          0.23750
+    1  2               18          0.11250
+    1  3                1          0.00625
+    1  4                0          0.00000
+    2  1                0          0.00000
+    2  2               69          0.43125
+    2  3                3          0.01875
+    2  4                8          0.05000
+    3  1                0          0.00000
+    3  2                4          0.02500
+    3  3                6          0.03750
+    3  4                0          0.00000
+    4  1                1          0.00625
+    4  2                1          0.00625
+    4  3                1          0.00625
+    4  4               10          0.06250
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR EACH LATENT CLASS VARIABLE
+BASED ON THEIR MOST LIKELY LATENT CLASS PATTERN
+
+  Latent Class
+    Variable    Class
+
+    T5             1              57          0.35625
+                   2              80          0.50000
+                   3              10          0.06250
+                   4              13          0.08125
+    T6             1              39          0.24375
+                   2              92          0.57500
+                   3              11          0.06875
+                   4              18          0.11250
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for Mixture analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  11:00:32
+        Ending Time:  11:00:32
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2021 Muthen & Muthen

@@ -1,0 +1,544 @@
+Mplus VERSION 8.6
+MUTHEN & MUTHEN
+01/28/2022   2:26 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE: STL Profile 1 - cross sectional LPA year 6
+  DATA: FILE = STL6_new.dat;
+
+  VARIABLE: NAMES ARE
+    ID sex E_Asp F_Asp
+    Score_S Score_M Score_F
+    D_at_S D_ut_S D_in_S D_sc_S D_STV_S
+    D_at_M D_ut_M D_in_M D_sc_M D_STV_M
+    D_at_F D_ut_F D_in_F D_sc_F D_STV_F
+    E_at_S E_ut_S E_in_S E_sc_S E_STV_S
+    E_at_M E_ut_M E_in_M E_sc_M E_STV_M
+    E_at_F E_ut_F E_in_F E_sc_F E_STV_F
+    F_at_S F_ut_S F_in_S F_sc_S F_STV_S
+    F_at_M F_ut_M F_in_M F_sc_M F_STV_M
+    F_at_F F_ut_F F_in_F F_sc_F F_STV_F;
+
+    USEVARIABLES ARE
+    F_sc_S F_STV_S
+    F_sc_M F_STV_M
+    F_sc_F F_STV_F
+    ;
+
+    MISSING ARE ALL(-999);
+
+    CLASSES = c(1);
+
+  ANALYSIS:	
+
+     	TYPE = MIXTURE;
+    	ESTIMATOR=MLR;
+    	processors = 4;
+      STARTS = 200 50;
+     	STITERATIONS=50;
+     	LRTSTARTS = 200 50 200 50;
+
+    MODEL:
+  %OVERALL%
+
+  %c#1%
+    [F_sc_S F_STV_S
+    F_sc_M F_STV_M
+    F_sc_F F_STV_F]
+    ;
+
+  OUTPUT: TECH1 TECH11 TECH14 samp stdyx;
+
+
+
+*** WARNING in MODEL command
+  All variables are uncorrelated with all other variables within class.
+  Check that this is what is intended.
+*** WARNING in OUTPUT command
+  TECH11 option is not available for TYPE=MIXTURE with only one class.
+  Request for TECH11 is ignored.
+*** WARNING in OUTPUT command
+  TECH14 option is not available for TYPE=MIXTURE with only one class.
+  Request for TECH14 is ignored.
+*** WARNING
+  Data set contains cases with missing on all variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on all variables:  344
+   4 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+STL Profile 1 - cross sectional LPA year 6
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         356
+
+Number of dependent variables                                    6
+Number of independent variables                                  0
+Number of continuous latent variables                            0
+Number of categorical latent variables                           1
+
+Observed dependent variables
+
+  Continuous
+   F_SC_S      F_STV_S     F_SC_M      F_STV_M     F_SC_F      F_STV_F
+
+Categorical latent variables
+   C
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-06
+    Relative loglikelihood change                        0.100D-06
+    Derivative                                           0.100D-05
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-05
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-05
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Random Starts Specifications
+  Number of initial stage random starts                        200
+  Number of final stage optimizations                           50
+  Number of initial stage iterations                            50
+  Initial stage convergence criterion                    0.100D+01
+  Random starts scale                                    0.500D+01
+  Random seed for generating random starts                       0
+
+Input data file(s)
+  STL6_new.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             1
+     Number of y missing data patterns           1
+     Number of u missing data patterns           0
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              F_SC_S        F_STV_S       F_SC_M        F_STV_M       F_SC_F
+              ________      ________      ________      ________      ________
+ F_SC_S         1.000
+ F_STV_S        1.000         1.000
+ F_SC_M         1.000         1.000         1.000
+ F_STV_M        1.000         1.000         1.000         1.000
+ F_SC_F         1.000         1.000         1.000         1.000         1.000
+ F_STV_F        1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              F_STV_F
+              ________
+ F_STV_F        1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              F_SC_S        F_STV_S       F_SC_M        F_STV_M       F_SC_F
+              ________      ________      ________      ________      ________
+                3.734         3.484         3.755         3.747         3.561
+
+
+           Means
+              F_STV_F
+              ________
+                3.422
+
+
+           Covariances
+              F_SC_S        F_STV_S       F_SC_M        F_STV_M       F_SC_F
+              ________      ________      ________      ________      ________
+ F_SC_S         0.665
+ F_STV_S        0.404         0.782
+ F_SC_M         0.261         0.181         0.950
+ F_STV_M        0.141         0.369         0.524         0.746
+ F_SC_F         0.344         0.170         0.290         0.134         0.785
+ F_STV_F        0.072         0.326         0.170         0.396         0.399
+
+
+           Covariances
+              F_STV_F
+              ________
+ F_STV_F        0.863
+
+
+           Correlations
+              F_SC_S        F_STV_S       F_SC_M        F_STV_M       F_SC_F
+              ________      ________      ________      ________      ________
+ F_SC_S         1.000
+ F_STV_S        0.560         1.000
+ F_SC_M         0.328         0.210         1.000
+ F_STV_M        0.200         0.483         0.622         1.000
+ F_SC_F         0.476         0.217         0.336         0.174         1.000
+ F_STV_F        0.095         0.397         0.188         0.494         0.485
+
+
+           Correlations
+              F_STV_F
+              ________
+ F_STV_F        1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -2344.144
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     F_SC_S                3.734      -0.621       1.000    0.56%       3.000      3.667      4.000
+             356.000       0.665       0.430       5.000    8.99%       4.000      4.333
+     F_STV_S               3.484      -0.314       1.000    0.28%       2.667      3.333      3.556
+             356.000       0.782      -0.410       5.000    3.09%       3.778      4.222
+     F_SC_M                3.755      -0.606       1.000    0.84%       3.000      3.667      4.000
+             356.000       0.950      -0.261       5.000   17.98%       4.000      4.667
+     F_STV_M               3.747      -0.600       1.000    0.56%       3.000      3.556      3.778
+             356.000       0.746      -0.091       5.000    5.62%       4.111      4.556
+     F_SC_F                3.561      -0.357       1.000    0.56%       2.667      3.333      3.667
+             356.000       0.785      -0.257       5.000    8.71%       4.000      4.333
+     F_STV_F               3.422      -0.317       1.000    0.28%       2.556      3.222      3.444
+             356.000       0.863      -0.542       5.000    3.93%       3.778      4.333
+
+RANDOM STARTS RESULTS RANKED FROM THE BEST TO THE WORST LOGLIKELIHOOD VALUES
+
+Final stage loglikelihood values at local maxima, seeds, and initial stage start numbers:
+
+           -2783.669  100874           108
+           -2783.669  402224           91
+           -2783.669  319144           176
+           -2783.669  939709           112
+           -2783.669  405079           68
+           -2783.669  576596           99
+           -2783.669  576220           115
+           -2783.669  972873           157
+           -2783.669  456213           160
+           -2783.669  609185           181
+           -2783.669  372176           23
+           -2783.669  22089            143
+           -2783.669  579995           183
+           -2783.669  264081           186
+           -2783.669  915107           54
+           -2783.669  345070           114
+           -2783.669  592219           119
+           -2783.669  475420           71
+           -2783.669  992389           77
+           -2783.669  120506           45
+           -2783.669  783110           72
+           -2783.669  417035           149
+           -2783.669  636396           168
+           -2783.669  318230           46
+           -2783.669  311214           64
+           -2783.669  192071           142
+           -2783.669  963053           43
+           -2783.669  168762           200
+           -2783.669  587946           120
+           -2783.669  565819           65
+           -2783.669  848890           95
+           -2783.669  726035           191
+           -2783.669  551639           55
+           -2783.669  648555           113
+           -2783.669  458181           189
+           -2783.669  415502           194
+           -2783.669  903420           5
+           -2783.669  392418           28
+           -2783.669  802779           122
+           -2783.669  987090           70
+           -2783.669  68985            17
+           -2783.669  626891           32
+           -2783.669  650371           14
+           -2783.669  260601           36
+           -2783.669  887676           22
+           -2783.669  27071            15
+           -2783.669  85462            51
+           -2783.669  unperturbed      0
+           -2783.669  606576           151
+           -2783.669  371246           101
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       12
+
+Loglikelihood
+
+          H0 Value                       -2783.669
+          H0 Scaling Correction Factor      0.9529
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    5591.339
+          Bayesian (BIC)                  5637.838
+          Sample-Size Adjusted BIC        5599.769
+            (n* = (n + 2) / 24)
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THE ESTIMATED MODEL
+
+    Latent
+   Classes
+
+       1        356.00000          1.00000
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON ESTIMATED POSTERIOR PROBABILITIES
+
+    Latent
+   Classes
+
+       1        356.00000          1.00000
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THEIR MOST LIKELY LATENT CLASS MEMBERSHIP
+
+Class Counts and Proportions
+
+    Latent
+   Classes
+
+       1              356          1.00000
+
+
+Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
+by Latent Class (Column)
+
+           1
+
+    1   1.000
+
+
+Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+           1
+
+    1   1.000
+
+
+Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+              1
+
+    1      0.000
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ Means
+    F_SC_S             3.734      0.043     86.402      0.000
+    F_STV_S            3.484      0.047     74.353      0.000
+    F_SC_M             3.755      0.052     72.706      0.000
+    F_STV_M            3.747      0.046     81.848      0.000
+    F_SC_F             3.561      0.047     75.823      0.000
+    F_STV_F            3.422      0.049     69.502      0.000
+
+ Variances
+    F_SC_S             0.665      0.055     12.105      0.000
+    F_STV_S            0.782      0.052     14.963      0.000
+    F_SC_M             0.950      0.066     14.306      0.000
+    F_STV_M            0.746      0.055     13.657      0.000
+    F_SC_F             0.785      0.055     14.291      0.000
+    F_STV_F            0.863      0.055     15.626      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.161E-01
+       (ratio of smallest to largest eigenvalue)
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ Means
+    F_SC_S             4.579      0.216     21.219      0.000
+    F_STV_S            3.941      0.154     25.641      0.000
+    F_SC_M             3.853      0.166     23.236      0.000
+    F_STV_M            4.338      0.188     23.074      0.000
+    F_SC_F             4.019      0.163     24.638      0.000
+    F_STV_F            3.684      0.141     26.056      0.000
+
+ Variances
+    F_SC_S             1.000      0.000    999.000    999.000
+    F_STV_S            1.000      0.000    999.000    999.000
+    F_SC_M             1.000      0.000    999.000    999.000
+    F_STV_M            1.000      0.000    999.000    999.000
+    F_SC_F             1.000      0.000    999.000    999.000
+    F_STV_F            1.000      0.000    999.000    999.000
+
+
+R-SQUARE
+
+Class 1
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS 1
+
+
+           NU
+              F_SC_S        F_STV_S       F_SC_M        F_STV_M       F_SC_F
+              ________      ________      ________      ________      ________
+                    1             2             3             4             5
+
+
+           NU
+              F_STV_F
+              ________
+                    6
+
+
+           THETA
+              F_SC_S        F_STV_S       F_SC_M        F_STV_M       F_SC_F
+              ________      ________      ________      ________      ________
+ F_SC_S             7
+ F_STV_S            0             8
+ F_SC_M             0             0             9
+ F_STV_M            0             0             0            10
+ F_SC_F             0             0             0             0            11
+ F_STV_F            0             0             0             0             0
+
+
+           THETA
+              F_STV_F
+              ________
+ F_STV_F           12
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS REGRESSION MODEL PART
+
+
+           ALPHA(C)
+              C#1
+              ________
+                    0
+
+
+     STARTING VALUES FOR LATENT CLASS 1
+
+
+           NU
+              F_SC_S        F_STV_S       F_SC_M        F_STV_M       F_SC_F
+              ________      ________      ________      ________      ________
+                3.734         3.484         3.755         3.747         3.561
+
+
+           NU
+              F_STV_F
+              ________
+                3.422
+
+
+           THETA
+              F_SC_S        F_STV_S       F_SC_M        F_STV_M       F_SC_F
+              ________      ________      ________      ________      ________
+ F_SC_S         0.332
+ F_STV_S        0.000         0.391
+ F_SC_M         0.000         0.000         0.475
+ F_STV_M        0.000         0.000         0.000         0.373
+ F_SC_F         0.000         0.000         0.000         0.000         0.393
+ F_STV_F        0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              F_STV_F
+              ________
+ F_STV_F        0.431
+
+
+     STARTING VALUES FOR LATENT CLASS REGRESSION MODEL PART
+
+
+           ALPHA(C)
+              C#1
+              ________
+                0.000
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for Mixture analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  14:26:12
+        Ending Time:  14:26:15
+       Elapsed Time:  00:00:03
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2021 Muthen & Muthen

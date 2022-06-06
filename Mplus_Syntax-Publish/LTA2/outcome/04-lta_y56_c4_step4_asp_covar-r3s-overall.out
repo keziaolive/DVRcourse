@@ -1,0 +1,4330 @@
+Mplus VERSION 8.6
+MUTHEN & MUTHEN
+04/20/2022   5:56 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE: STL - LTA with Asp based on Dispersion similarity partial - covar-equal
+  DATA: FILE = y56LTA2_2.dat;
+
+  VARIABLE: NAMES ARE
+    E_SC_S E_STV_S E_SC_M E_STV_M E_SC_F E_STV_F
+    ID SEX E_ASP F_ASP ASP
+    SCORE_S SCORE_M SCORE_F
+    E_CPROB1 E_CPROB2 E_CPROB3 E_CPROB4 Y5
+    F_SC_S F_STV_S F_SC_M F_STV_M F_SC_F F_STV_F
+    F_CPROB1 F_CPROB2 F_CPROB3 F_CPROB4 Y6
+    ;
+
+    USEVARIABLES ARE
+    Y5 Y6 ASP
+    SEX
+    ;
+
+    NOMINAL = Y5 Y6;
+
+    MISSING =*;
+
+    CLASSES = T5(4) T6(4);
+
+  ANALYSIS:	
+     	TYPE = MIXTURE;
+    	ESTIMATOR=MLR;
+    	processors = 4;
+      STARTS = 0;
+
+  MODEL:
+  %OVERALL%
+
+  T6 ON T5;
+  ASP ON SEX;
+
+  MODEL T5:
+       	%T5#1%
+       	
+       	[Y5#1@13.455]; [Y5#2@12.603]; [Y5#3@8.579];
+
+       	%T5#2%
+       	
+       	[Y5#1@1.71]; [Y5#2@4.713]; [Y5#3@1.162];
+
+          %T5#3%
+       	
+       	[Y5#1@-0.779]; [Y5#2@2.185]; [Y5#3@2.726];
+
+          %T5#4%
+       	
+       	[Y5#1@-13.443]; [Y5#2@-0.913]; [Y5#3@-2.999];
+
+          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  MODEL T6:
+          %T6#1%
+       	
+       	[Y6#1@13.484]; [Y6#2@12.545]; [Y6#3@7.12];
+                            	     	
+       	[ASP] (oa1);
+
+          %T6#2%
+       	
+       	[Y6#1@1.236]; [Y6#2@5.078]; [Y6#3@1.438];
+
+          [ASP] (oa2);
+
+          %T6#3%
+       	
+       	[Y6#1@-2.315]; [Y6#2@2.302]; [Y6#3@2.747];
+
+          [ASP] (oa3);
+
+       	%T6#4%
+       	
+       	[Y6#1@-13.426]; [Y6#2@-0.948]; [Y6#3@-2.417];
+
+          [ASP] (oa4);
+
+  MODEL CONSTRAINT:
+  NEW (y12);
+  y12 = oa1-oa2;
+  NEW (y13);
+  y13 = oa1-oa3;
+  NEW (y14);
+  y14 = oa1-oa4;
+  NEW (y23);
+  y23 = oa2-oa3;
+  NEW (y24);
+  y24 = oa2-oa4;
+  NEW (y34);
+  y34 = oa3-oa4;
+
+  NEW (T1);
+  T1 = oa1;
+  NEW (T2);
+  T2 = oa2;
+  NEW (T3);
+  T3 = oa3;
+  NEW (T4);
+  T4 = oa4;
+
+  OUTPUT: CINTERVAL RESIDUAL SVALUES TECH1 TECH7 TECH15;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+STL - LTA with Asp based on Dispersion similarity partial - covar-equal
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         360
+
+Number of dependent variables                                    3
+Number of independent variables                                  1
+Number of continuous latent variables                            0
+Number of categorical latent variables                           2
+
+Observed dependent variables
+
+  Continuous
+   ASP
+
+  Unordered categorical (nominal)
+   Y5          Y6
+
+Observed independent variables
+   SEX
+
+Categorical latent variables
+   T5          T6
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-03
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-03
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-03
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-03
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Parameterization                                             LOGIT
+
+Input data file(s)
+  y56LTA2_2.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             2
+     Number of y missing data patterns           2
+     Number of u missing data patterns           0
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              ASP           SEX
+              ________      ________
+ ASP            0.775
+ SEX            0.775         1.000
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    Y5
+      Category 1    0.272           98.000
+      Category 2    0.514          185.000
+      Category 3    0.128           46.000
+      Category 4    0.086           31.000
+    Y6
+      Category 1    0.208           55.000
+      Category 2    0.566          150.000
+      Category 3    0.128           34.000
+      Category 4    0.098           26.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     ASP                   0.326       0.742       0.000   67.38%       0.000      0.000      0.000
+             279.000       0.220      -1.450       1.000   32.62%       0.000      1.000
+     SEX                   1.444       0.224       1.000   55.56%       1.000      1.000      1.000
+             360.000       0.247      -1.950       2.000   44.44%       2.000      2.000
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS       0.408D-17.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 16, T6#1 ON T5#2
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       21
+
+Loglikelihood
+
+          H0 Value                        -853.785
+          H0 Scaling Correction Factor      0.8466
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    1749.570
+          Bayesian (BIC)                  1831.178
+          Sample-Size Adjusted BIC        1764.555
+            (n* = (n + 2) / 24)
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR EACH LATENT CLASS VARIABLE
+BASED ON THE ESTIMATED MODEL
+
+  Latent Class
+    Variable    Class
+
+    T5             1       125.30806          0.34808
+                   2       128.42528          0.35674
+                   3        67.01640          0.18616
+                   4        39.25026          0.10903
+    T6             1        98.37341          0.27326
+                   2       144.13716          0.40038
+                   3        67.90005          0.18861
+                   4        49.58938          0.13775
+
+
+CLASSIFICATION QUALITY
+
+     Entropy                         0.639
+
+
+LATENT TRANSITION PROBABILITIES BASED ON THE ESTIMATED MODEL
+
+  T5 Classes (Rows) by T6 Classes (Columns)
+
+            1        2        3        4
+
+   1     0.727    0.191    0.075    0.007
+   2     0.000    0.890    0.000    0.110
+   3     0.018    0.020    0.790    0.172
+   4     0.156    0.118    0.141    0.585
+
+
+TRANSITION PROBABILITY ODDS
+
+     TRANSITION TABLE ODDS AND 95% CONFIDENCE INTERVALS FOR T5 TO T6
+           1.000(   1.000,   1.000)      0.262(   0.082,   0.838)      0.104(   0.027,   0.399)      0.010(   0.000,   6
+           0.000(   0.000,   0.000)      1.000(   1.000,   1.000)      0.000(   0.000,   0.000)      0.124(   0.034,   0
+           0.022(   0.000,   2.050)      0.026(   0.000,********)      1.000(   1.000,   1.000)      0.218(   0.052,   0
+           0.266(   0.052,   1.362)      0.201(   0.008,   5.272)      0.240(   0.017,   3.497)      1.000(   1.000,   1
+
+
+C-SPECIFIC CLASSIFICATION RESULTS
+
+Classification Quality for T5
+
+     Entropy                         0.579
+
+Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
+by Latent Class (Column)
+
+           1        2        3        4
+
+    1   0.918    0.063    0.013    0.006
+    2   0.134    0.716    0.093    0.056
+    3   0.034    0.098    0.829    0.039
+    4   0.000    0.034    0.085    0.881
+
+
+Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+           1        2        3        4
+
+    1   0.813    0.171    0.016    0.000
+    2   0.055    0.893    0.044    0.008
+    3   0.021    0.222    0.717    0.039
+    4   0.018    0.229    0.058    0.695
+
+
+Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+              1        2        3        4
+
+    1     13.573   12.016    9.632    0.000
+    2      1.892    4.683    1.682    0.000
+    3     -0.622    1.729    2.901    0.000
+    4     -3.671   -1.110   -2.491    0.000
+
+Classification Quality for T6
+
+     Entropy                         0.516
+
+Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
+by Latent Class (Column)
+
+           1        2        3        4
+
+    1   0.872    0.092    0.028    0.008
+    2   0.153    0.703    0.081    0.063
+    3   0.012    0.109    0.781    0.097
+    4   0.045    0.079    0.117    0.759
+
+
+Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+           1        2        3        4
+
+    1   0.691    0.282    0.007    0.019
+    2   0.050    0.883    0.045    0.023
+    3   0.032    0.217    0.679    0.072
+    4   0.013    0.228    0.116    0.643
+
+
+Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+              1        2        3        4
+
+    1      3.574    2.678   -0.987    0.000
+    2      0.765    3.645    0.662    0.000
+    3     -0.804    1.100    2.243    0.000
+    4     -3.885   -1.035   -1.715    0.000
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Parameters in the Overall Part of the Model (Parameters Equal in All of the Classes)
+
+ ASP        ON
+    SEX               -0.109      0.058     -1.886      0.059
+
+ Residual Variances
+    ASP                0.205      0.010     20.330      0.000
+
+Parameters for Class-specific Model Parts of T5
+
+Latent Class T5#1
+
+ Means
+    Y5#1              13.455      0.000    999.000    999.000
+    Y5#2              12.603      0.000    999.000    999.000
+    Y5#3               8.579      0.000    999.000    999.000
+
+Latent Class T5#2
+
+ Means
+    Y5#1               1.710      0.000    999.000    999.000
+    Y5#2               4.713      0.000    999.000    999.000
+    Y5#3               1.162      0.000    999.000    999.000
+
+Latent Class T5#3
+
+ Means
+    Y5#1              -0.779      0.000    999.000    999.000
+    Y5#2               2.185      0.000    999.000    999.000
+    Y5#3               2.726      0.000    999.000    999.000
+
+Latent Class T5#4
+
+ Means
+    Y5#1             -13.443      0.000    999.000    999.000
+    Y5#2              -0.913      0.000    999.000    999.000
+    Y5#3              -2.999      0.000    999.000    999.000
+
+Parameters for Class-specific Model Parts of T6
+
+Latent Class T6#1
+
+ Means
+    Y6#1              13.484      0.000    999.000    999.000
+    Y6#2              12.545      0.000    999.000    999.000
+    Y6#3               7.120      0.000    999.000    999.000
+
+ Intercepts
+    ASP                0.575      0.118      4.869      0.000
+
+Latent Class T6#2
+
+ Means
+    Y6#1               1.236      0.000    999.000    999.000
+    Y6#2               5.078      0.000    999.000    999.000
+    Y6#3               1.438      0.000    999.000    999.000
+
+ Intercepts
+    ASP                0.533      0.105      5.092      0.000
+
+Latent Class T6#3
+
+ Means
+    Y6#1              -2.315      0.000    999.000    999.000
+    Y6#2               2.302      0.000    999.000    999.000
+    Y6#3               2.747      0.000    999.000    999.000
+
+ Intercepts
+    ASP                0.371      0.101      3.656      0.000
+
+Latent Class T6#4
+
+ Means
+    Y6#1             -13.426      0.000    999.000    999.000
+    Y6#2              -0.948      0.000    999.000    999.000
+    Y6#3              -2.417      0.000    999.000    999.000
+
+ Intercepts
+    ASP                0.234      0.088      2.654      0.008
+
+Categorical Latent Variables
+
+ T6#1     ON
+    T5#1               5.955      3.428      1.737      0.082
+    T5#2             -19.273      1.146    -16.820      0.000
+    T5#3              -0.952      2.616     -0.364      0.716
+
+ T6#2     ON
+    T5#1               4.897      3.754      1.304      0.192
+    T5#2               3.689      1.902      1.940      0.052
+    T5#3              -0.529      7.643     -0.069      0.945
+
+ T6#3     ON
+    T5#1               3.792      3.724      1.018      0.309
+    T5#2             -12.154      2.179     -5.578      0.000
+    T5#3               2.950      1.631      1.808      0.071
+
+ Means
+    T5#1               1.161      0.231      5.021      0.000
+    T5#2               1.185      0.253      4.691      0.000
+    T5#3               0.535      0.278      1.923      0.055
+    T6#1              -1.323      0.833     -1.589      0.112
+    T6#2              -1.603      1.666     -0.962      0.336
+    T6#3              -1.426      1.366     -1.044      0.297
+
+New/Additional Parameters
+    Y12                0.042      0.115      0.368      0.713
+    Y13                0.205      0.108      1.903      0.057
+    Y14                0.341      0.078      4.380      0.000
+    Y23                0.163      0.114      1.429      0.153
+    Y24                0.299      0.077      3.857      0.000
+    Y34                0.136      0.082      1.669      0.095
+    T1                 0.575      0.118      4.869      0.000
+    T2                 0.533      0.105      5.092      0.000
+    T3                 0.371      0.101      3.656      0.000
+    T4                 0.234      0.088      2.654      0.008
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.408E-17
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Parameters in the Overall Part of the Model (Parameters Equal in All of the Classes)
+
+ ASP      ON
+    SEX             -0.259      -0.223      -0.205      -0.109      -0.014       0.004       0.040
+
+ Residual Variances
+    ASP              0.179       0.185       0.188       0.205       0.221       0.225       0.231
+
+Parameters for Class-specific Model Parts of T5
+
+Latent Class T5#1
+
+ Means
+    Y5#1            13.455      13.455      13.455      13.455      13.455      13.455      13.455
+    Y5#2            12.603      12.603      12.603      12.603      12.603      12.603      12.603
+    Y5#3             8.579       8.579       8.579       8.579       8.579       8.579       8.579
+
+Latent Class T5#2
+
+ Means
+    Y5#1             1.710       1.710       1.710       1.710       1.710       1.710       1.710
+    Y5#2             4.713       4.713       4.713       4.713       4.713       4.713       4.713
+    Y5#3             1.162       1.162       1.162       1.162       1.162       1.162       1.162
+
+Latent Class T5#3
+
+ Means
+    Y5#1            -0.779      -0.779      -0.779      -0.779      -0.779      -0.779      -0.779
+    Y5#2             2.185       2.185       2.185       2.185       2.185       2.185       2.185
+    Y5#3             2.726       2.726       2.726       2.726       2.726       2.726       2.726
+
+Latent Class T5#4
+
+ Means
+    Y5#1           -13.443     -13.443     -13.443     -13.443     -13.443     -13.443     -13.443
+    Y5#2            -0.913      -0.913      -0.913      -0.913      -0.913      -0.913      -0.913
+    Y5#3            -2.999      -2.999      -2.999      -2.999      -2.999      -2.999      -2.999
+
+Parameters for Class-specific Model Parts of T6
+
+Latent Class T6#1
+
+ Means
+    Y6#1            13.484      13.484      13.484      13.484      13.484      13.484      13.484
+    Y6#2            12.545      12.545      12.545      12.545      12.545      12.545      12.545
+    Y6#3             7.120       7.120       7.120       7.120       7.120       7.120       7.120
+
+ Intercepts
+    ASP              0.271       0.344       0.381       0.575       0.769       0.807       0.879
+
+Latent Class T6#2
+
+ Means
+    Y6#1             1.236       1.236       1.236       1.236       1.236       1.236       1.236
+    Y6#2             5.078       5.078       5.078       5.078       5.078       5.078       5.078
+    Y6#3             1.438       1.438       1.438       1.438       1.438       1.438       1.438
+
+ Intercepts
+    ASP              0.263       0.328       0.361       0.533       0.705       0.738       0.803
+
+Latent Class T6#3
+
+ Means
+    Y6#1            -2.315      -2.315      -2.315      -2.315      -2.315      -2.315      -2.315
+    Y6#2             2.302       2.302       2.302       2.302       2.302       2.302       2.302
+    Y6#3             2.747       2.747       2.747       2.747       2.747       2.747       2.747
+
+ Intercepts
+    ASP              0.109       0.172       0.204       0.371       0.537       0.569       0.632
+
+Latent Class T6#4
+
+ Means
+    Y6#1           -13.426     -13.426     -13.426     -13.426     -13.426     -13.426     -13.426
+    Y6#2            -0.948      -0.948      -0.948      -0.948      -0.948      -0.948      -0.948
+    Y6#3            -2.417      -2.417      -2.417      -2.417      -2.417      -2.417      -2.417
+
+ Intercepts
+    ASP              0.007       0.061       0.089       0.234       0.379       0.407       0.462
+
+Categorical Latent Variables
+
+ T6#1     ON
+    T5#1            -2.874      -0.763       0.317       5.955      11.593      12.673      14.784
+    T5#2           -22.224     -21.519     -21.158     -19.273     -17.388     -17.027     -16.321
+    T5#3            -7.689      -6.079      -5.255      -0.952       3.350       4.174       5.785
+
+ T6#2     ON
+    T5#1            -4.773      -2.461      -1.279       4.897      11.073      12.256      14.567
+    T5#2            -1.210      -0.039       0.560       3.689       6.817       7.416       8.587
+    T5#3           -20.214     -15.508     -13.101      -0.529      12.043      14.451      19.157
+
+ T6#3     ON
+    T5#1            -5.801      -3.508      -2.334       3.792       9.919      11.092      13.386
+    T5#2           -17.766     -16.424     -15.738     -12.154      -8.570      -7.883      -6.542
+    T5#3            -1.253      -0.248       0.266       2.950       5.633       6.147       7.152
+
+ Means
+    T5#1             0.565       0.708       0.781       1.161       1.541       1.614       1.756
+    T5#2             0.534       0.690       0.770       1.185       1.601       1.681       1.836
+    T5#3            -0.182      -0.010       0.077       0.535       0.993       1.080       1.252
+    T6#1            -3.468      -2.955      -2.693      -1.323       0.047       0.309       0.822
+    T6#2            -5.894      -4.868      -4.343      -1.603       1.138       1.662       2.688
+    T6#3            -4.945      -4.103      -3.673      -1.426       0.821       1.252       2.093
+
+New/Additional Parameters
+    Y12             -0.253      -0.182      -0.146       0.042       0.230       0.267       0.337
+    Y13             -0.072      -0.006       0.028       0.205       0.382       0.415       0.482
+    Y14              0.140       0.188       0.213       0.341       0.469       0.493       0.541
+    Y23             -0.130      -0.060      -0.025       0.163       0.350       0.385       0.455
+    Y24              0.099       0.147       0.171       0.299       0.426       0.451       0.498
+    Y34             -0.074      -0.024       0.002       0.136       0.271       0.296       0.347
+    T1               0.271       0.344       0.381       0.575       0.769       0.807       0.879
+    T2               0.263       0.328       0.361       0.533       0.705       0.738       0.803
+    T3               0.109       0.172       0.204       0.371       0.537       0.569       0.632
+    T4               0.007       0.061       0.089       0.234       0.379       0.407       0.462
+
+
+MODEL COMMAND WITH FINAL ESTIMATES USED AS STARTING VALUES
+
+     %OVERALL%
+
+     asp ON sex;
+
+     t6#1 ON t5#1*5.95498;
+     t6#1 ON t5#2*-19.27274;
+     t6#1 ON t5#3*-0.95216;
+     t6#2 ON t5#1*4.89724;
+     t6#2 ON t5#2*3.68851;
+     t6#2 ON t5#3*-0.52866;
+     t6#3 ON t5#1*3.79227;
+     t6#3 ON t5#2*-12.15382;
+     t6#3 ON t5#3*2.94951;
+
+     [ t5#1*1.16082 ];
+     [ t5#2*1.18539 ];
+     [ t5#3*0.53498 ];
+     [ t6#1*-1.32293 ];
+     [ t6#2*-1.60270 ];
+     [ t6#3*-1.42585 ];
+
+     asp ON sex*-0.10938 (2);
+
+     asp*0.20478 (3);
+
+
+  MODEL T5:
+
+     %T5#1%
+
+     [ y5#1@13.45500 ];
+     [ y5#2@12.60300 ];
+     [ y5#3@8.57900 ];
+
+     %T5#2%
+
+     [ y5#1@1.71000 ];
+     [ y5#2@4.71300 ];
+     [ y5#3@1.16200 ];
+
+     %T5#3%
+
+     [ y5#1@-0.77900 ];
+     [ y5#2@2.18500 ];
+     [ y5#3@2.72600 ];
+
+     %T5#4%
+
+     [ y5#1@-13.44300 ];
+     [ y5#2@-0.91300 ];
+     [ y5#3@-2.99900 ];
+
+  MODEL T6:
+
+     %T6#1%
+
+     [ asp*0.57515 ] (oa1);
+     [ y6#1@13.48400 ];
+     [ y6#2@12.54500 ];
+     [ y6#3@7.12000 ];
+
+     %T6#2%
+
+     [ asp*0.53303 ] (oa2);
+     [ y6#1@1.23600 ];
+     [ y6#2@5.07800 ];
+     [ y6#3@1.43800 ];
+
+     %T6#3%
+
+     [ asp*0.37051 ] (oa3);
+     [ y6#1@-2.31500 ];
+     [ y6#2@2.30200 ];
+     [ y6#3@2.74700 ];
+
+     %T6#4%
+
+     [ asp*0.23426 ] (oa4);
+     [ y6#1@-13.42600 ];
+     [ y6#2@-0.94800 ];
+     [ y6#3@-2.41700 ];
+
+     ! NEW statements in MODEL CONSTRAINT
+     NEW(y12*0.04212);
+     NEW(y13*0.20463);
+     NEW(y14*0.34089);
+     NEW(y23*0.16252);
+     NEW(y24*0.29877);
+     NEW(y34*0.13625);
+     NEW(t1*0.57515);
+     NEW(t2*0.53303);
+     NEW(t3*0.37051);
+     NEW(t4*0.23426);
+
+
+
+
+RESIDUAL OUTPUT
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 1 1
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.410         1.513
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+               -0.008         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.208
+ SEX           -0.027         0.250
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.033
+ SEX           -0.026         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 1 2
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.366         1.523
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+               -0.002         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.208
+ SEX           -0.027         0.249
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.024
+ SEX           -0.011         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 1 3
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.218         1.394
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+                0.013         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.208
+ SEX           -0.026         0.239
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP           -0.030
+ SEX           -0.027         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 1 4
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.088         1.335
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+               -0.038         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.207
+ SEX           -0.024         0.223
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP           -0.160
+ SEX            0.021         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 2 1
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.407         1.538
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+                0.073         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.208
+ SEX           -0.027         0.249
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.042
+ SEX           -0.074         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 2 2
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.373         1.460
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+                0.006         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.208
+ SEX           -0.027         0.248
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.028
+ SEX           -0.018         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 2 3
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.219         1.388
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+                0.002         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.208
+ SEX           -0.026         0.238
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP           -0.036
+ SEX           -0.019         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 2 4
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.068         1.519
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+               -0.008         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.208
+ SEX           -0.027         0.250
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP           -0.151
+ SEX            0.012         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 3 1
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.435         1.286
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+                0.257         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.207
+ SEX           -0.022         0.204
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.006
+ SEX           -0.102         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 3 2
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.383         1.372
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+                0.016         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.208
+ SEX           -0.026         0.234
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.032
+ SEX            0.000         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 3 3
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.229         1.291
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+                0.019         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.207
+ SEX           -0.023         0.206
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP           -0.021
+ SEX           -0.019         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 3 4
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.092         1.299
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+                0.027         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.207
+ SEX           -0.023         0.209
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP           -0.102
+ SEX           -0.001         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 4 1
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.415         1.460
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+                0.103         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.208
+ SEX           -0.027         0.248
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.042
+ SEX           -0.079         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 4 2
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.375         1.443
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+                0.130         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.208
+ SEX           -0.027         0.247
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.042
+ SEX            0.034         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 4 3
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.221         1.363
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+               -0.049         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.208
+ SEX           -0.025         0.231
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP           -0.065
+ SEX            0.027         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR PATTERN 4 4
+
+
+           Model Estimated Means
+              ASP           SEX
+              ________      ________
+                0.076         1.451
+
+
+           Residuals for Means
+              ASP           SEX
+              ________      ________
+                0.004         0.000
+
+
+           Model Estimated Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.208
+ SEX           -0.027         0.248
+
+
+           Residuals for Covariances
+              ASP           SEX
+              ________      ________
+ ASP           -0.134
+ SEX            0.023         0.000
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 1 1
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.735          0.697                  0.038                0.790
+       Category 1        0.259          0.297                 -0.038               -0.801
+       Category 2        0.006          0.005                  0.000                0.049
+       Category 3        0.000          0.000                  0.000                0.000
+     Y6
+       Category 0        0.718          0.718                  0.000               -0.006
+       Category 1        0.281          0.281                  0.000                0.006
+       Category 2        0.001          0.001                  0.000                0.006
+       Category 3        0.000          0.000                  0.000               -0.003
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 1 2
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.697          0.697                  0.000                0.000
+       Category 1        0.297          0.297                  0.000                0.000
+       Category 2        0.005          0.005                  0.000                0.000
+       Category 3        0.000          0.000                  0.000                0.000
+     Y6
+       Category 0        0.020          0.020                  0.000                0.002
+       Category 1        0.950          0.949                  0.001                0.030
+       Category 2        0.025          0.025                  0.000                0.010
+       Category 3        0.004          0.006                 -0.002               -0.112
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 1 3
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.707          0.697                  0.009                0.063
+       Category 1        0.288          0.297                 -0.009               -0.064
+       Category 2        0.005          0.005                  0.000                0.004
+       Category 3        0.000          0.000                  0.000                0.000
+     Y6
+       Category 0        0.004          0.004                  0.000                0.003
+       Category 1        0.377          0.374                  0.003                0.018
+       Category 2        0.585          0.584                  0.001                0.005
+       Category 3        0.034          0.037                 -0.004               -0.062
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 1 4
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.697          0.697                  0.000                0.000
+       Category 1        0.297          0.297                  0.000                0.000
+       Category 2        0.005          0.005                  0.000                0.000
+       Category 3        0.000          0.000                  0.000                0.000
+     Y6
+       Category 0        0.000          0.000                  0.000                0.000
+       Category 1        0.261          0.262                 -0.002               -0.004
+       Category 2        0.060          0.060                 -0.001               -0.004
+       Category 3        0.680          0.677                  0.003                0.005
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 2 1
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.054          0.001                  0.054                0.000
+       Category 1        0.904          0.013                  0.891                0.001
+       Category 2        0.032          0.000                  0.031                0.000
+       Category 3        0.010          0.000                  0.010                0.000
+     Y6
+       Category 0        0.664          0.010                  0.654                0.001
+       Category 1        0.335          0.004                  0.331                0.001
+       Category 2        0.001          0.000                  0.001                0.000
+       Category 3        0.000          0.000                  0.000                0.000
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 2 2
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.046          0.046                  0.000                0.000
+       Category 1        0.920          0.920                  0.000                0.000
+       Category 2        0.026          0.026                  0.000                0.000
+       Category 3        0.008          0.008                  0.000                0.000
+     Y6
+       Category 0        0.016          0.020                 -0.005               -0.361
+       Category 1        0.957          0.949                  0.008                0.377
+       Category 2        0.023          0.025                 -0.002               -0.129
+       Category 3        0.005          0.006                 -0.001               -0.159
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 2 3
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.048          0.046                  0.002                0.000
+       Category 1        0.916          0.920                 -0.004                0.000
+       Category 2        0.028          0.026                  0.001                0.000
+       Category 3        0.009          0.008                  0.000                0.000
+     Y6
+       Category 0        0.003          0.004                 -0.001                0.000
+       Category 1        0.395          0.374                  0.021                0.000
+       Category 2        0.565          0.584                 -0.019                0.000
+       Category 3        0.037          0.037                 -0.001                0.000
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 2 4
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.046          0.046                  0.000                0.000
+       Category 1        0.920          0.920                  0.000                0.000
+       Category 2        0.026          0.026                  0.000                0.000
+       Category 3        0.008          0.008                  0.000                0.000
+     Y6
+       Category 0        0.000          0.000                  0.000               -0.001
+       Category 1        0.264          0.262                  0.001                0.012
+       Category 2        0.056          0.060                 -0.004               -0.070
+       Category 3        0.680          0.677                  0.003                0.024
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 3 1
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.019          0.018                  0.001                0.008
+       Category 1        0.302          0.347                 -0.045               -0.102
+       Category 2        0.638          0.596                  0.042                0.093
+       Category 3        0.041          0.039                  0.002                0.011
+     Y6
+       Category 0        0.717          0.718                 -0.001               -0.002
+       Category 1        0.282          0.281                  0.001                0.002
+       Category 2        0.001          0.001                  0.000                0.001
+       Category 3        0.000          0.000                  0.000                0.000
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 3 2
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.018          0.018                  0.000                0.000
+       Category 1        0.347          0.347                  0.000                0.000
+       Category 2        0.596          0.596                  0.000                0.000
+       Category 3        0.039          0.039                  0.000                0.000
+     Y6
+       Category 0        0.019          0.020                 -0.002               -0.013
+       Category 1        0.950          0.949                  0.002                0.009
+       Category 2        0.025          0.025                  0.000                0.002
+       Category 3        0.006          0.006                  0.000               -0.005
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 3 3
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.018          0.018                  0.000                0.013
+       Category 1        0.336          0.347                 -0.011               -0.169
+       Category 2        0.606          0.596                  0.010                0.154
+       Category 3        0.039          0.039                  0.000                0.018
+     Y6
+       Category 0        0.002          0.004                 -0.001               -0.151
+       Category 1        0.377          0.374                  0.003                0.040
+       Category 2        0.583          0.584                 -0.001               -0.014
+       Category 3        0.037          0.037                  0.000               -0.018
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 3 4
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.018          0.018                  0.000                0.000
+       Category 1        0.347          0.347                  0.000                0.000
+       Category 2        0.596          0.596                  0.000                0.000
+       Category 3        0.039          0.039                  0.000                0.000
+     Y6
+       Category 0        0.000          0.000                  0.000               -0.002
+       Category 1        0.262          0.262                  0.000                0.000
+       Category 2        0.059          0.060                 -0.001               -0.016
+       Category 3        0.678          0.677                  0.001                0.008
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 4 1
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.000          0.000                  0.000                0.000
+       Category 1        0.241          0.277                 -0.036               -0.197
+       Category 2        0.037          0.034                  0.002                0.033
+       Category 3        0.722          0.689                  0.033                0.178
+     Y6
+       Category 0        0.708          0.718                 -0.010               -0.053
+       Category 1        0.291          0.281                  0.010                0.054
+       Category 2        0.001          0.001                  0.000               -0.012
+       Category 3        0.000          0.000                  0.000                0.000
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 4 2
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.000          0.000                  0.000                0.000
+       Category 1        0.277          0.277                  0.000                0.000
+       Category 2        0.034          0.034                  0.000                0.000
+       Category 3        0.689          0.689                  0.000                0.000
+     Y6
+       Category 0        0.020          0.020                 -0.001               -0.012
+       Category 1        0.953          0.949                  0.004                0.039
+       Category 2        0.022          0.025                 -0.002               -0.034
+       Category 3        0.005          0.006                 -0.001               -0.024
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 4 3
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.000          0.000                  0.000                0.000
+       Category 1        0.268          0.277                 -0.009               -0.046
+       Category 2        0.035          0.034                  0.001                0.008
+       Category 3        0.697          0.689                  0.008                0.042
+     Y6
+       Category 0        0.003          0.004                  0.000               -0.017
+       Category 1        0.342          0.374                 -0.033               -0.158
+       Category 2        0.618          0.584                  0.033                0.159
+       Category 3        0.037          0.037                  0.000               -0.005
+
+
+     UNIVARIATE DISTRIBUTION FIT FOR PATTERN 4 4
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     Y5
+       Category 0        0.000          0.000                  0.000                0.000
+       Category 1        0.277          0.277                  0.000                0.000
+       Category 2        0.034          0.034                  0.000                0.000
+       Category 3        0.689          0.689                  0.000                0.000
+     Y6
+       Category 0        0.000          0.000                  0.000               -0.001
+       Category 1        0.224          0.262                 -0.038               -0.418
+       Category 2        0.068          0.060                  0.008                0.159
+       Category 3        0.708          0.677                  0.030                0.312
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 1 1
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    1             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 1 2
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    4             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 1 3
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    5             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 1 4
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    6             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 2 1
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    1             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 2 2
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    4             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 2 3
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    5             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 2 4
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    6             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 3 1
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    1             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 3 2
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    4             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 3 3
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    5             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 3 4
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    6             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 4 1
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    1             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 4 2
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    4             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 4 3
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    5             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS PATTERN 4 4
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP                0             0
+ SEX                0             0
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP                0
+ SEX                0             0
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                    6             0
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP                0             2
+ SEX                0             0
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP                3
+ SEX                0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS REGRESSION MODEL PART
+
+
+           ALPHA(C)
+              T5#1          T5#2          T5#3          T5#4          T6#1
+              ________      ________      ________      ________      ________
+                    7             8             9             0            10
+
+
+           ALPHA(C)
+              T6#2          T6#3          T6#4
+              ________      ________      ________
+                   11            12             0
+
+
+           GAMMA(C)
+              SEX
+              ________
+ T5#1               0
+ T5#2               0
+ T5#3               0
+ T5#4               0
+ T6#1               0
+ T6#2               0
+ T6#3               0
+ T6#4               0
+
+
+           BETA(C)
+              T5#1          T5#2          T5#3          T5#4
+              ________      ________      ________      ________
+ T6#1              13            16            19             0
+ T6#2              14            17            20             0
+ T6#3              15            18            21             0
+ T6#4               0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR THE CENSORED/NOMINAL/COUNT MODEL PART
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 1
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 1 1
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 2
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 1 2
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 3
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 1 3
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 4
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 1 4
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 1
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 2 1
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 2
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 2 2
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 3
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 2 3
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 4
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 2 4
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 1
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 3 1
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 2
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 3 2
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 3
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 3 3
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 4
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 3 4
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 1
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 4 1
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 2
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 4 2
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 3
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 4 3
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 4
+              Y6#3
+              ________
+                    0
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 4 4
+              SEX
+              ________
+ Y5#1               0
+ Y5#2               0
+ Y5#3               0
+ Y6#1               0
+ Y6#2               0
+ Y6#3               0
+
+
+     PARAMETER SPECIFICATION FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              Y12           Y13           Y14           Y23           Y24
+              ________      ________      ________      ________      ________
+                   22            23            24            25            26
+
+
+           NEW/ADDITIONAL PARAMETERS
+              Y34           T1            T2            T3            T4
+              ________      ________      ________      ________      ________
+                   27            28            29            30            31
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 1 1
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.209         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 1 2
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.326         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 1 3
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.326         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 1 4
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.443         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 2 1
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.209         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 2 2
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.326         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 2 3
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.326         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 2 4
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.443         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 3 1
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.209         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 3 2
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.326         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 3 3
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.326         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 3 4
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.443         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 4 1
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.209         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 4 2
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.326         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 4 3
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.326         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS PATTERN 4 4
+
+
+           NU
+              ASP           SEX
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              ASP           SEX
+              ________      ________
+ ASP            1.000         0.000
+ SEX            0.000         1.000
+
+
+           THETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000
+ SEX            0.000         0.000
+
+
+           ALPHA
+              ASP           SEX
+              ________      ________
+                0.443         0.000
+
+
+           BETA
+              ASP           SEX
+              ________      ________
+ ASP            0.000         0.000
+ SEX            0.000         0.000
+
+
+           PSI
+              ASP           SEX
+              ________      ________
+ ASP            0.110
+ SEX            0.000         0.123
+
+
+     STARTING VALUES FOR LATENT CLASS REGRESSION MODEL PART
+
+
+           ALPHA(C)
+              T5#1          T5#2          T5#3          T5#4          T6#1
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA(C)
+              T6#2          T6#3          T6#4
+              ________      ________      ________
+                0.000         0.000         0.000
+
+
+           GAMMA(C)
+              SEX
+              ________
+ T5#1           0.000
+ T5#2           0.000
+ T5#3           0.000
+ T5#4           0.000
+ T6#1           0.000
+ T6#2           0.000
+ T6#3           0.000
+ T6#4           0.000
+
+
+           BETA(C)
+              T5#1          T5#2          T5#3          T5#4
+              ________      ________      ________      ________
+ T6#1           0.000         0.000         0.000         0.000
+ T6#2           0.000         0.000         0.000         0.000
+ T6#3           0.000         0.000         0.000         0.000
+ T6#4           0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR THE CENSORED/NOMINAL/COUNT MODEL PART
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               13.455        12.603         8.579        13.484        12.545
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 1
+              Y6#3
+              ________
+                7.120
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 1 1
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               13.455        12.603         8.579         1.236         5.078
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 2
+              Y6#3
+              ________
+                1.438
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 1 2
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               13.455        12.603         8.579        -2.315         2.302
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 3
+              Y6#3
+              ________
+                2.747
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 1 3
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               13.455        12.603         8.579       -13.426        -0.948
+
+
+           NU(P) FOR LATENT CLASS PATTERN 1 4
+              Y6#3
+              ________
+               -2.417
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 1 4
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                1.710         4.713         1.162        13.484        12.545
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 1
+              Y6#3
+              ________
+                7.120
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 2 1
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                1.710         4.713         1.162         1.236         5.078
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 2
+              Y6#3
+              ________
+                1.438
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 2 2
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                1.710         4.713         1.162        -2.315         2.302
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 3
+              Y6#3
+              ________
+                2.747
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 2 3
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+                1.710         4.713         1.162       -13.426        -0.948
+
+
+           NU(P) FOR LATENT CLASS PATTERN 2 4
+              Y6#3
+              ________
+               -2.417
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 2 4
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               -0.779         2.185         2.726        13.484        12.545
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 1
+              Y6#3
+              ________
+                7.120
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 3 1
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               -0.779         2.185         2.726         1.236         5.078
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 2
+              Y6#3
+              ________
+                1.438
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 3 2
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               -0.779         2.185         2.726        -2.315         2.302
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 3
+              Y6#3
+              ________
+                2.747
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 3 3
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+               -0.779         2.185         2.726       -13.426        -0.948
+
+
+           NU(P) FOR LATENT CLASS PATTERN 3 4
+              Y6#3
+              ________
+               -2.417
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 3 4
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 1
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+              -13.443        -0.913        -2.999        13.484        12.545
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 1
+              Y6#3
+              ________
+                7.120
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 4 1
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 2
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+              -13.443        -0.913        -2.999         1.236         5.078
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 2
+              Y6#3
+              ________
+                1.438
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 4 2
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 3
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+              -13.443        -0.913        -2.999        -2.315         2.302
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 3
+              Y6#3
+              ________
+                2.747
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 4 3
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 4
+              Y5#1          Y5#2          Y5#3          Y6#1          Y6#2
+              ________      ________      ________      ________      ________
+              -13.443        -0.913        -2.999       -13.426        -0.948
+
+
+           NU(P) FOR LATENT CLASS PATTERN 4 4
+              Y6#3
+              ________
+               -2.417
+
+
+           KAPPA(P) FOR LATENT CLASS PATTERN 4 4
+              SEX
+              ________
+ Y5#1           0.000
+ Y5#2           0.000
+ Y5#3           0.000
+ Y6#1           0.000
+ Y6#2           0.000
+ Y6#3           0.000
+
+
+     STARTING VALUES FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              Y12           Y13           Y14           Y23           Y24
+              ________      ________      ________      ________      ________
+                0.500         0.500         0.500         0.500         0.500
+
+
+           NEW/ADDITIONAL PARAMETERS
+              Y34           T1            T2            T3            T4
+              ________      ________      ________      ________      ________
+                0.500         0.500         0.500         0.500         0.500
+
+
+TECHNICAL 7 OUTPUT
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 1 1
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.401         1.513
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.240
+ SEX           -0.053         0.250
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 1 2
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.365         1.523
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.232
+ SEX           -0.038         0.249
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 1 3
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.231         1.394
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.177
+ SEX           -0.053         0.239
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 1 4
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.050         1.335
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.048
+ SEX           -0.004         0.223
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 2 1
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.480         1.538
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.250
+ SEX           -0.101         0.249
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 2 2
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.379         1.460
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.235
+ SEX           -0.045         0.248
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 2 3
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.220         1.388
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.172
+ SEX           -0.045         0.238
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 2 4
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.060         1.519
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.056
+ SEX           -0.015         0.250
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 3 1
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.691         1.286
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.214
+ SEX           -0.125         0.204
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 3 2
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.398         1.372
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.240
+ SEX           -0.025         0.234
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 3 3
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.248         1.291
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.187
+ SEX           -0.041         0.206
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 3 4
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.119         1.299
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.105
+ SEX           -0.024         0.209
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 4 1
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.518         1.460
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.250
+ SEX           -0.106         0.248
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 4 2
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.505         1.443
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.250
+ SEX            0.007         0.247
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 4 3
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.172         1.363
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.143
+ SEX            0.002         0.231
+
+
+     SAMPLE STATISTICS WEIGHTED BY ESTIMATED CLASS PROBABILITIES FOR PATTERN 4 4
+
+
+           Means
+              ASP           SEX
+              ________      ________
+                0.080         1.451
+
+
+           Covariances
+              ASP           SEX
+              ________      ________
+ ASP            0.073
+ SEX           -0.004         0.248
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 1 1
+
+     Variable
+     Y5
+       Category 1        0.735
+       Category 2        0.259
+       Category 3        0.006
+       Category 4        0.000
+     Y6
+       Category 1        0.718
+       Category 2        0.281
+       Category 3        0.001
+       Category 4        0.000
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 1 2
+
+     Variable
+     Y5
+       Category 1        0.697
+       Category 2        0.297
+       Category 3        0.005
+       Category 4        0.000
+     Y6
+       Category 1        0.020
+       Category 2        0.950
+       Category 3        0.025
+       Category 4        0.004
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 1 3
+
+     Variable
+     Y5
+       Category 1        0.707
+       Category 2        0.288
+       Category 3        0.005
+       Category 4        0.000
+     Y6
+       Category 1        0.004
+       Category 2        0.377
+       Category 3        0.585
+       Category 4        0.034
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 1 4
+
+     Variable
+     Y5
+       Category 1        0.697
+       Category 2        0.297
+       Category 3        0.005
+       Category 4        0.000
+     Y6
+       Category 1        0.000
+       Category 2        0.261
+       Category 3        0.060
+       Category 4        0.680
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 2 1
+
+     Variable
+     Y5
+       Category 1        0.054
+       Category 2        0.904
+       Category 3        0.032
+       Category 4        0.010
+     Y6
+       Category 1        0.664
+       Category 2        0.335
+       Category 3        0.001
+       Category 4        0.000
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 2 2
+
+     Variable
+     Y5
+       Category 1        0.046
+       Category 2        0.920
+       Category 3        0.026
+       Category 4        0.008
+     Y6
+       Category 1        0.016
+       Category 2        0.957
+       Category 3        0.023
+       Category 4        0.005
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 2 3
+
+     Variable
+     Y5
+       Category 1        0.048
+       Category 2        0.916
+       Category 3        0.028
+       Category 4        0.009
+     Y6
+       Category 1        0.003
+       Category 2        0.395
+       Category 3        0.565
+       Category 4        0.037
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 2 4
+
+     Variable
+     Y5
+       Category 1        0.046
+       Category 2        0.920
+       Category 3        0.026
+       Category 4        0.008
+     Y6
+       Category 1        0.000
+       Category 2        0.264
+       Category 3        0.056
+       Category 4        0.680
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 3 1
+
+     Variable
+     Y5
+       Category 1        0.019
+       Category 2        0.302
+       Category 3        0.638
+       Category 4        0.041
+     Y6
+       Category 1        0.717
+       Category 2        0.282
+       Category 3        0.001
+       Category 4        0.000
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 3 2
+
+     Variable
+     Y5
+       Category 1        0.018
+       Category 2        0.347
+       Category 3        0.596
+       Category 4        0.039
+     Y6
+       Category 1        0.019
+       Category 2        0.950
+       Category 3        0.025
+       Category 4        0.006
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 3 3
+
+     Variable
+     Y5
+       Category 1        0.018
+       Category 2        0.336
+       Category 3        0.606
+       Category 4        0.039
+     Y6
+       Category 1        0.002
+       Category 2        0.377
+       Category 3        0.583
+       Category 4        0.037
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 3 4
+
+     Variable
+     Y5
+       Category 1        0.018
+       Category 2        0.347
+       Category 3        0.596
+       Category 4        0.039
+     Y6
+       Category 1        0.000
+       Category 2        0.262
+       Category 3        0.059
+       Category 4        0.678
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 4 1
+
+     Variable
+     Y5
+       Category 1        0.000
+       Category 2        0.241
+       Category 3        0.037
+       Category 4        0.722
+     Y6
+       Category 1        0.708
+       Category 2        0.291
+       Category 3        0.001
+       Category 4        0.000
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 4 2
+
+     Variable
+     Y5
+       Category 1        0.000
+       Category 2        0.277
+       Category 3        0.034
+       Category 4        0.689
+     Y6
+       Category 1        0.020
+       Category 2        0.953
+       Category 3        0.022
+       Category 4        0.005
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 4 3
+
+     Variable
+     Y5
+       Category 1        0.000
+       Category 2        0.268
+       Category 3        0.035
+       Category 4        0.697
+     Y6
+       Category 1        0.003
+       Category 2        0.342
+       Category 3        0.618
+       Category 4        0.037
+
+
+     UNIVARIATE SAMPLE DISTRIBUTIONS FOR PATTERN 4 4
+
+     Variable
+     Y5
+       Category 1        0.000
+       Category 2        0.277
+       Category 3        0.034
+       Category 4        0.689
+     Y6
+       Category 1        0.000
+       Category 2        0.224
+       Category 3        0.068
+       Category 4        0.708
+
+
+TECHNICAL 15 OUTPUT
+
+
+     ESTIMATED CONDITIONAL PROBABILITIES FOR THE LATENT CLASS VARIABLES
+
+     P(T5=1)=0.348
+     P(T5=2)=0.357
+     P(T5=3)=0.186
+     P(T5=4)=0.109
+
+
+     P(T6=1|T5=1)=0.727
+     P(T6=2|T5=1)=0.191
+     P(T6=3|T5=1)=0.075
+     P(T6=4|T5=1)=0.007
+
+
+     P(T6=1|T5=2)=0.000
+     P(T6=2|T5=2)=0.890
+     P(T6=3|T5=2)=0.000
+     P(T6=4|T5=2)=0.110
+
+
+     P(T6=1|T5=3)=0.018
+     P(T6=2|T5=3)=0.020
+     P(T6=3|T5=3)=0.790
+     P(T6=4|T5=3)=0.172
+
+
+     P(T6=1|T5=4)=0.156
+     P(T6=2|T5=4)=0.118
+     P(T6=3|T5=4)=0.141
+     P(T6=4|T5=4)=0.585
+
+
+     ESTIMATED MARGINAL PROBABILITIES FOR THE LATENT CLASS VARIABLES
+
+     P(T6=1)=0.273
+     P(T6=2)=0.400
+     P(T6=3)=0.189
+     P(T6=4)=0.138
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THE ESTIMATED MODEL
+
+  Latent Class
+    Pattern
+
+    1  1         91.06704          0.25296
+    1  2         23.90494          0.06640
+    1  3          9.44956          0.02625
+    1  4          0.88652          0.00246
+    2  1          0.00000          0.00000
+    2  2        114.23635          0.31732
+    2  3          0.00002          0.00000
+    2  4         14.18891          0.03941
+    3  1          1.18553          0.00329
+    3  2          1.36878          0.00380
+    3  3         52.92828          0.14702
+    3  4         11.53381          0.03204
+    4  1          6.12083          0.01700
+    4  2          4.62709          0.01285
+    4  3          5.52220          0.01534
+    4  4         22.98014          0.06383
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON ESTIMATED POSTERIOR PROBABILITIES
+
+  Latent Class
+    Pattern
+
+    1  1         91.06707          0.25296
+    1  2         23.90492          0.06640
+    1  3          9.44965          0.02625
+    1  4          0.88652          0.00246
+    2  1          0.00000          0.00000
+    2  2        114.23669          0.31732
+    2  3          0.00002          0.00000
+    2  4         14.18878          0.03941
+    3  1          1.18542          0.00329
+    3  2          1.36875          0.00380
+    3  3         52.92823          0.14702
+    3  4         11.53361          0.03204
+    4  1          6.12090          0.01700
+    4  2          4.62710          0.01285
+    4  3          5.52221          0.01534
+    4  4         22.98014          0.06383
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR EACH LATENT CLASS VARIABLE
+BASED ON ESTIMATED POSTERIOR PROBABILITIES
+
+  Latent Class
+    Variable    Class
+
+    T5             1       125.30815          0.34808
+                   2       128.42549          0.35674
+                   3        67.01601          0.18616
+                   4        39.25035          0.10903
+    T6             1        98.37338          0.27326
+                   2       144.13746          0.40038
+                   3        67.90011          0.18861
+                   4        49.58905          0.13775
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THEIR MOST LIKELY LATENT CLASS PATTERN
+
+Class Counts and Proportions
+
+  Latent Class
+    Pattern
+
+    1  1               74          0.20556
+    1  2               32          0.08889
+    1  3                4          0.01111
+    1  4                1          0.00278
+    2  1                0          0.00000
+    2  2              147          0.40833
+    2  3                0          0.00000
+    2  4               13          0.03611
+    3  1                1          0.00278
+    3  2                0          0.00000
+    3  3               52          0.14444
+    3  4                5          0.01389
+    4  1                3          0.00833
+    4  2                2          0.00556
+    4  3                3          0.00833
+    4  4               23          0.06389
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR EACH LATENT CLASS VARIABLE
+BASED ON THEIR MOST LIKELY LATENT CLASS PATTERN
+
+  Latent Class
+    Variable    Class
+
+    T5             1             111          0.30833
+                   2             160          0.44444
+                   3              58          0.16111
+                   4              31          0.08611
+    T6             1              78          0.21667
+                   2             181          0.50278
+                   3              59          0.16389
+                   4              42          0.11667
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for Mixture analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  17:56:24
+        Ending Time:  17:56:24
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2021 Muthen & Muthen
